@@ -34,11 +34,11 @@ export const App = () => {
           px="8"
           py="6"
         >
-          <Box w="500px" flexShrink="0">
+          <Box minW="500px" flexShrink="0">
             <Heading mb="4">Collections</Heading>
             <Collections state={state} />
           </Box>
-          <Box w="500px" flexShrink="0">
+          <Box minW="500px" flexShrink="0">
             <Heading mb="4">Result</Heading>
             <Result state={state} />
           </Box>

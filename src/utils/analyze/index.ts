@@ -16,19 +16,17 @@ export type FieldResult = {
   valueLiteral?: string;
 };
 
-export type Fields = {
-  [fieldName: string]: FieldResult | Fields;
+export type Document = {
+  [fieldName: string]: FieldResult | Document;
 };
 
 export type AnalysisResult = {
   collections: {
     [collectionName: string]: {
-      fields: Fields;
+      fields: Document;
     };
   };
-  result: {
-    [fieldName: string]: FieldResult;
-  };
+  result: Document;
 };
 
 export type StageAnalyzer<S extends Stage> = (arg: {
@@ -37,7 +35,7 @@ export type StageAnalyzer<S extends Stage> = (arg: {
   stage: S;
 }) => void;
 
-export const isFieldResult = (v: Fields | FieldResult): v is FieldResult =>
+export const isFieldResult = (v: Document | FieldResult): v is FieldResult =>
   'type' in v;
 
 export const analyze = (aggregation: Aggregation) =>
