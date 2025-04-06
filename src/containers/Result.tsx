@@ -12,18 +12,20 @@ export const Result = ({ state }: Props) => {
       <Card.Root size="sm">
         <Card.Body>
           <DataList.Root size="sm" orientation="horizontal">
-            {Object.entries(state.result).map(([label, item]) => (
-              <DataList.Item key={label}>
-                <DataList.ItemLabel>{label}</DataList.ItemLabel>
-                {isFieldResult(item) ? (
-                  <DataList.ItemValue>
-                    <FieldBadge field={item} />
-                  </DataList.ItemValue>
-                ) : (
-                  <>TODO: Nested</>
-                )}
-              </DataList.Item>
-            ))}
+            {Object.entries(state.result)
+              .toSorted(([a], [b]) => (a === '_id' ? -1 : a.localeCompare(b)))
+              .map(([label, item]) => (
+                <DataList.Item key={label}>
+                  <DataList.ItemLabel>{label}</DataList.ItemLabel>
+                  {isFieldResult(item) ? (
+                    <DataList.ItemValue>
+                      <FieldBadge field={item} />
+                    </DataList.ItemValue>
+                  ) : (
+                    <>TODO: Nested</>
+                  )}
+                </DataList.Item>
+              ))}
           </DataList.Root>
         </Card.Body>
       </Card.Root>
