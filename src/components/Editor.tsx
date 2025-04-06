@@ -37,7 +37,6 @@ export const Editor = ({ onChange }: Props) => {
         return;
       }
 
-      console.log(res);
       onChange(res);
       setIsValid(true);
     } catch {

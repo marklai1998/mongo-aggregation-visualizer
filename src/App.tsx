@@ -3,11 +3,16 @@ import { Editor } from '@/components/Editor.tsx';
 import { ColorModeButton } from '@/components/ui/color-mode.tsx';
 import { Provider } from '@/components/ui/provider';
 import type { Aggregation } from '@/types/aggregation.ts';
+import { analysis } from '@/utils/analysis.ts';
 import { Box, HStack, VStack } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 function App() {
   const [value, setValue] = useState<Aggregation>([]);
+
+  useMemo(() => {
+    console.log(JSON.stringify(analysis(value)));
+  }, [value]);
 
   return (
     <Provider>
