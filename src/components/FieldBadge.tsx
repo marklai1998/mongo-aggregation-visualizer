@@ -3,7 +3,7 @@ import { useHoveringField } from '@/hooks/useHoveringField.ts';
 import type { Field } from '@/utils/analyze';
 import { Badge, HStack, IconButton } from '@chakra-ui/react';
 import { Fragment } from 'react';
-import { AiOutlineDelete } from 'react-icons/ai';
+import { AiOutlineDelete, AiOutlineFunction } from 'react-icons/ai';
 
 type Props = {
   field: Field;
@@ -67,6 +67,22 @@ export const FieldBadge = ({ field }: Props) => {
             >
               <IconButton size="2xs" variant="ghost" colorPalette="red">
                 <AiOutlineDelete />
+              </IconButton>
+            </Tooltip>
+          );
+        }
+
+        if ('isExpression' in status && status.isExpression) {
+          return (
+            <Tooltip
+              content={JSON.stringify(status.expression)}
+              openDelay={0}
+              closeDelay={0}
+              // biome-ignore lint/suspicious/noArrayIndexKey: doesn't matter
+              key={idx}
+            >
+              <IconButton size="2xs" variant="ghost" colorPalette="red">
+                <AiOutlineFunction />
               </IconButton>
             </Tooltip>
           );

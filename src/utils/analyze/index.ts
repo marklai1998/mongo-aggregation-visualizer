@@ -10,10 +10,15 @@ export enum FieldType {
   DEFAULT = 'DEFAULT',
 }
 
-export type FieldState = {
-  isUnseted: boolean;
-  step: number;
-};
+export type FieldState =
+  | {
+      isUnseted: boolean;
+      step: number;
+    }
+  | {
+      isExpression: boolean;
+      expression: string;
+    };
 
 export type Field = {
   id: string;
@@ -44,6 +49,8 @@ export type StageAnalyzer<S extends Stage> = (arg: {
 }) => void;
 
 export const isFieldResult = (v: Document | Field): v is Field => 'type' in v;
+export const isExpression = (v: object) =>
+  Object.keys(v).some((v) => v.startsWith('$'));
 
 export const analyze = (aggregation: Aggregation) =>
   aggregation.reduce<AnalysisResult>(
