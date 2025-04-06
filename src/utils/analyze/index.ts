@@ -1,12 +1,14 @@
 import type { Aggregation } from '@/types/aggregation.ts';
+import { analyzeAddField } from '@/utils/analyze/addField.ts';
+import { analyzeUnset } from '@/utils/analyze/unset.ts';
 
 const DEFAULT_COLLECTION = 'Source';
 
-enum FieldType {
+export enum FieldType {
   DEFAULT = 'DEFAULT',
 }
 
-type AnalysisResult = {
+export type AnalysisResult = {
   collection: {
     [collectionName: string]: {
       fields: {
@@ -25,24 +27,15 @@ const createCollection = (res: AnalysisResult, name: string) => {
   };
 };
 
-export const analysis = (aggregation: Aggregation) =>
+export const analyze = (aggregation: Aggregation) =>
   aggregation.reduce<AnalysisResult>(
     (acc, stage) => {
-      if ('$addFields' in stage) {
-        const content = stage.$addFields;
+      createCollection(acc, DEFAULT_COLLECTION);
 
-        const keys = Object.keys(content);
-        console.log(content);
-        createCollection(acc, DEFAULT_COLLECTION);
-        for (const key of keys) {
-          acc.collection[DEFAULT_COLLECTION].fields[String(key)] = {
-            type: FieldType.DEFAULT,
-          };
-        }
-      }
+      if ('$addFields' in stage)
+        analyzeAddField(acc, DEFAULT_COLLECTION, stage);
 
-      if ('$unset' in stage) {
-      }
+      if ('$unset' in stage) analyzeUnset(acc, DEFAULT_COLLECTION, stage);
 
       return acc;
     },

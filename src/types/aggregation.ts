@@ -13,3 +13,6 @@ export const stage = Type.Union([addField, unset]);
 export const aggregation = Type.Array(stage);
 
 export type Aggregation = Static<typeof aggregation>;
+
+export type AddField = Static<typeof addField>;
+export type Unset = Static<typeof unset>;
