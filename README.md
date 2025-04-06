@@ -1,8 +1,47 @@
-# React + TypeScript + Vite
+# Mongo aggregation visualizer
 
-This template provides a minimal setup to get React working in Vite with HMR .
+## TODO
 
-Currently, two official plugins are available:
+### Stages
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [x] $addFields
+- [ ] $bucket
+- [ ] $bucketAuto
+- [ ] $changeStream
+- [ ] $changeStreamSplitLargeEvent
+- [ ] $collStats
+- [ ] $count
+- [ ] $densify
+- [ ] $documents
+- [ ] $facet
+- [ ] $fill
+- [ ] $geoNear
+- [ ] $graphLookup
+- [ ] $group
+- [ ] $indexStats
+- [ ] $limit
+- [ ] $listSampledQueries
+- [ ] $listSearchIndexes
+- [ ] $listSessions
+- [ ] $lookup
+- [ ] $match
+- [ ] $merge
+- [ ] $out
+- [ ] $planCacheStats
+- [ ] $project
+- [ ] $querySettings
+- [ ] $queryStats
+- [ ] $redact
+- [ ] $replaceRoot
+- [ ] $sample
+- [ ] $search
+- [ ] $searchMeta
+- [x] $set
+- [ ] $setWindowFields
+- [ ] $skip
+- [ ] $sort
+- [ ] $sortByCount
+- [ ] $unionWith
+- [x] $unset
+- [ ] $unwind
+- [ ] $vectorSearch
