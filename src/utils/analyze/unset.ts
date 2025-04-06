@@ -1,7 +1,7 @@
 import type { Unset } from '@/types/aggregation.ts';
 import { type AnalysisResult, FieldType } from '@/utils/analyze/index.ts';
 import { getColor } from '@/utils/getColor.ts';
-import { assocPath } from 'ramda';
+import { assocPath, dissocPath } from 'ramda';
 
 export const analyzeUnset = (
   state: AnalysisResult,
@@ -11,10 +11,14 @@ export const analyzeUnset = (
   const content = stage.$unset;
 
   for (const key of typeof content === 'string' ? [content] : content) {
+    const path = key.split('.');
+
     state.collections[baseCollection].fields = assocPath(
-      key.split('.'),
+      path,
       { type: FieldType.DEFAULT, color: getColor(`${baseCollection}.${key}`) },
       state.collections[baseCollection].fields,
     );
+
+    state.result = dissocPath(path, state.result);
   }
 };

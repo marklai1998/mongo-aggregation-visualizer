@@ -24,6 +24,9 @@ export type AnalysisResult = {
       fields: Fields;
     };
   };
+  result: {
+    [fieldName: string]: FieldResult;
+  };
 };
 
 const createCollection = (res: AnalysisResult, name: string) => {
@@ -53,5 +56,13 @@ export const analyze = (aggregation: Aggregation) =>
 
       return acc;
     },
-    { collections: {} },
+    {
+      collections: {},
+      result: {
+        _id: {
+          type: FieldType.DEFAULT,
+          color: getColor(`${DEFAULT_COLLECTION}._id`),
+        },
+      },
+    },
   );

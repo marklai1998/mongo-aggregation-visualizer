@@ -1,15 +1,30 @@
-import type { AnalysisResult } from '@/utils/analyze';
-import { Card } from '@chakra-ui/react';
+import { type AnalysisResult, isFieldResult } from '@/utils/analyze';
+import { Badge, Card, DataList } from '@chakra-ui/react';
 
 export type Props = {
   state: AnalysisResult;
 };
 
-export const Result = (_props: Props) => {
+export const Result = ({ state }: Props) => {
   return (
     <div>
       <Card.Root size="sm">
-        <Card.Body>TODO</Card.Body>
+        <Card.Body>
+          <DataList.Root size="sm" orientation="horizontal">
+            {Object.entries(state.result).map(([label, item]) => (
+              <DataList.Item key={label}>
+                <DataList.ItemLabel>{label}</DataList.ItemLabel>
+                {isFieldResult(item) ? (
+                  <DataList.ItemValue>
+                    <Badge w="20px" bg={item.color} />
+                  </DataList.ItemValue>
+                ) : (
+                  <>Nested!</>
+                )}
+              </DataList.Item>
+            ))}
+          </DataList.Root>
+        </Card.Body>
       </Card.Root>
     </div>
   );
