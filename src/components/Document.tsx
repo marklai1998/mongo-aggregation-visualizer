@@ -5,11 +5,10 @@ import { Card, DataList } from '@chakra-ui/react';
 
 type Props = {
   document: MongoDocument;
-  isNested?: boolean;
 };
 
-export const Document = ({ document, isNested }: Props) => (
-  <Card.Root size="sm" w="full" variant={isNested ? 'outline' : 'subtle'}>
+export const Document = ({ document }: Props) => (
+  <Card.Root size="sm" w="full" variant="outline">
     <Card.Body>
       <DataList.Root size="sm" orientation="horizontal">
         {Object.entries(document)
