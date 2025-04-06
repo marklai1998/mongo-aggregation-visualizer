@@ -21,11 +21,18 @@ function App() {
           <Box w="full">Mongo Aggregation Visualizer</Box>
           <ColorModeButton />
         </HStack>
-        <HStack w="full" h="full" flex={1} alignItems="start">
-          <Box h="full" w="40%">
+        <HStack w="full" h="full" flex={1} alignItems="start" gap={0}>
+          <Box h="full" w="500px" flexShrink={0}>
             <Editor onChange={setValue} />
           </Box>
-          <Box>test</Box>
+          <HStack overflow="auto" h="full" alignItems="start">
+            <Box w="500px" flexShrink="0">
+              Collections
+            </Box>
+            <Box w="500px" flexShrink="0">
+              Result
+            </Box>
+          </HStack>
         </HStack>
       </VStack>
     </Provider>
