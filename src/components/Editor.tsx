@@ -1,9 +1,11 @@
 import { useColorMode } from '@/components/ui/color-mode.tsx';
-import type { Aggregation } from '@/types/aggregation.ts';
-import { Box, Flex, VStack } from '@chakra-ui/react';
+import { type Aggregation, aggregation } from '@/types/aggregation.ts';
 import MonacoEditor from '@monaco-editor/react';
+import Ajv from 'ajv';
 import JSON5 from 'json5';
 import { useEffect, useState } from 'react';
+
+const ajv = new Ajv();
 
 type Props = {
   onChange: (value: Aggregation) => void;
@@ -22,14 +24,19 @@ export const Editor = ({ onChange }: Props) => {
     defaultValue,
   );
 
-  const [isValid, setIsValid] = useState<boolean>(true);
-  // TODO: invalid handling
-  console.log(isValid);
+  const [, setIsValid] = useState<boolean>(true);
 
   useEffect(() => {
     if (!stringValue) return;
     try {
       const res = JSON5.parse(stringValue);
+      const valid = ajv.validate(aggregation, res);
+      if (!valid) {
+        console.log(ajv.errors);
+        setIsValid(false);
+        return;
+      }
+
       console.log(res);
       onChange(res);
       setIsValid(true);
