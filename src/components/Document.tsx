@@ -15,13 +15,13 @@ export const Document = ({ document }: Props) => (
           .toSorted(([a], [b]) => (a === '_id' ? -1 : a.localeCompare(b)))
           .map(([label, item]) => (
             <DataList.Item key={label} alignItems="start">
-              <DataList.ItemLabel>{label}</DataList.ItemLabel>
+              <DataList.ItemLabel lineHeight="tall">{label}</DataList.ItemLabel>
               {isFieldResult(item) ? (
                 <DataList.ItemValue>
                   <FieldBadge field={item} />
                 </DataList.ItemValue>
               ) : (
-                <Document document={item} isNested />
+                <Document document={item} />
               )}
             </DataList.Item>
           ))}

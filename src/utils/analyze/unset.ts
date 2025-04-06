@@ -7,6 +7,7 @@ export const analyzeUnset: StageAnalyzer<Unset> = ({
   state,
   collection,
   stage,
+  idx,
 }) => {
   const content = stage.$unset;
 
@@ -20,6 +21,7 @@ export const analyzeUnset: StageAnalyzer<Unset> = ({
         id,
         type: FieldType.DEFAULT,
         color: getColor(id),
+        status: [{ isUnseted: true, step: idx }],
       },
       state.collections[collection].fields,
     );

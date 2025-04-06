@@ -36,6 +36,7 @@ export const addFieldRecursive = (
           type: FieldType.DEFAULT,
           color: getColor(id),
           valueLiteral: String(content),
+          status: [],
         },
         state.result,
       );

@@ -1,9 +1,12 @@
+import { Tooltip } from '@/components/ui/tooltip.tsx';
 import { useHoveringField } from '@/hooks/useHoveringField.ts';
-import type { FieldResult } from '@/utils/analyze';
-import { Badge } from '@chakra-ui/react';
+import type { Field } from '@/utils/analyze';
+import { Badge, HStack, IconButton } from '@chakra-ui/react';
+import { Fragment } from 'react';
+import { AiOutlineDelete } from 'react-icons/ai';
 
 type Props = {
-  field: FieldResult;
+  field: Field;
 };
 
 const hexToRgb = (hex: string) => {
@@ -36,21 +39,41 @@ export const FieldBadge = ({ field }: Props) => {
   const { hoveringId, setHoveringId } = useHoveringField();
 
   return (
-    <Badge
-      minW="20px"
-      bg={`#${field.color}`}
-      {...(hoveringId === field.id ? { 'data-focus': true } : {})}
-      focusRing="outside"
-      size="xs"
-      color={darkOrLight(field.color) === 'dark' ? 'black' : 'white'}
-      onMouseOver={() => {
-        setHoveringId(field.id);
-      }}
-      onMouseOut={() => {
-        setHoveringId(null);
-      }}
-    >
-      {field?.valueLiteral}
-    </Badge>
+    <HStack>
+      <Badge
+        minW="40px"
+        bg={`#${field.color}`}
+        {...(hoveringId === field.id ? { 'data-focus': true } : {})}
+        focusRing="outside"
+        color={darkOrLight(field.color) === 'dark' ? 'black' : 'white'}
+        onMouseOver={() => {
+          setHoveringId(field.id);
+        }}
+        onMouseOut={() => {
+          setHoveringId(null);
+        }}
+      >
+        {field?.valueLiteral}
+      </Badge>
+      {field.status.map((status, idx) => {
+        if ('isUnseted' in status && status.isUnseted) {
+          return (
+            <Tooltip
+              content={`This field is unseted, step: ${status.step + 1}`}
+              openDelay={0}
+              closeDelay={0}
+              // biome-ignore lint/suspicious/noArrayIndexKey: doesn't matter
+              key={idx}
+            >
+              <IconButton size="2xs" variant="ghost" colorPalette="red">
+                <AiOutlineDelete />
+              </IconButton>
+            </Tooltip>
+          );
+        }
+        // biome-ignore lint/suspicious/noArrayIndexKey: doesn't matter
+        return <Fragment key={idx} />;
+      })}
+    </HStack>
   );
 };
