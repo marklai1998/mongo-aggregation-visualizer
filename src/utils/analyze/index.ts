@@ -1,5 +1,6 @@
 import type { Aggregation, Stage } from '@/types/aggregation.ts';
 import { analyzeAddField } from '@/utils/analyze/addField.ts';
+import { analyzeSet } from '@/utils/analyze/set.ts';
 import { analyzeUnset } from '@/utils/analyze/unset.ts';
 import { getColor } from '@/utils/getColor.ts';
 
@@ -50,6 +51,7 @@ export const analyze = (aggregation: Aggregation) =>
       const arg = { state, collection: DEFAULT_COLLECTION, idx };
 
       if ('$addFields' in stage) analyzeAddField({ ...arg, stage });
+      if ('$set' in stage) analyzeSet({ ...arg, stage });
       if ('$unset' in stage) analyzeUnset({ ...arg, stage });
 
       return state;

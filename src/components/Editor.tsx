@@ -43,7 +43,8 @@ export const Editor = ({ onChange }: Props) => {
 
       onChange(res);
       setIsValid(true);
-    } catch {
+    } catch (e) {
+      console.log(e);
       setIsValid(false);
     }
   }, [stringValue, onChange]);
