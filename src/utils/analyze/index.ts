@@ -10,6 +10,7 @@ export enum FieldType {
 }
 
 export type FieldResult = {
+  id: string;
   type: FieldType;
   color: string;
 };
@@ -31,11 +32,14 @@ export type AnalysisResult = {
 
 const createCollection = (res: AnalysisResult, name: string) => {
   if (res.collections[name]) return;
+  const id = `${name}._id`;
+
   res.collections[name] = {
     fields: {
       _id: {
+        id,
         type: FieldType.DEFAULT,
-        color: getColor(`${name}._id`),
+        color: getColor(id),
       },
     },
   };
@@ -60,6 +64,7 @@ export const analyze = (aggregation: Aggregation) =>
       collections: {},
       result: {
         _id: {
+          id: `${DEFAULT_COLLECTION}._id`,
           type: FieldType.DEFAULT,
           color: getColor(`${DEFAULT_COLLECTION}._id`),
         },

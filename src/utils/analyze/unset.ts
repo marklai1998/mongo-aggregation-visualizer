@@ -12,10 +12,15 @@ export const analyzeUnset = (
 
   for (const key of typeof content === 'string' ? [content] : content) {
     const path = key.split('.');
+    const id = `${baseCollection}.${key}`;
 
     state.collections[baseCollection].fields = assocPath(
       path,
-      { type: FieldType.DEFAULT, color: getColor(`${baseCollection}.${key}`) },
+      {
+        id,
+        type: FieldType.DEFAULT,
+        color: getColor(id),
+      },
       state.collections[baseCollection].fields,
     );
 

@@ -10,9 +10,11 @@ export const analyzeAddField = (
   const content = stage.$addFields;
   const keys = Object.keys(content);
   for (const key of keys) {
+    const id = `${baseCollection}.${key}`;
     state.collections[baseCollection].fields[String(key)] = {
+      id,
       type: FieldType.DEFAULT,
-      color: getColor(`${baseCollection}.${key}`),
+      color: getColor(id),
     };
   }
 };

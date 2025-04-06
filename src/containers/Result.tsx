@@ -1,7 +1,8 @@
+import { FieldBadge } from '@/components/FieldBadge.tsx';
 import { type AnalysisResult, isFieldResult } from '@/utils/analyze';
-import { Badge, Card, DataList } from '@chakra-ui/react';
+import { Card, DataList } from '@chakra-ui/react';
 
-export type Props = {
+type Props = {
   state: AnalysisResult;
 };
 
@@ -16,10 +17,10 @@ export const Result = ({ state }: Props) => {
                 <DataList.ItemLabel>{label}</DataList.ItemLabel>
                 {isFieldResult(item) ? (
                   <DataList.ItemValue>
-                    <Badge w="20px" bg={item.color} />
+                    <FieldBadge field={item} />
                   </DataList.ItemValue>
                 ) : (
-                  <>Nested!</>
+                  <>TODO: Nested</>
                 )}
               </DataList.Item>
             ))}
