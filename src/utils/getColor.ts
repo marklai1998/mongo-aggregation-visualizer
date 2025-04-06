@@ -13,4 +13,4 @@ function intToRGB(i: number) {
   return '00000'.substring(0, 6 - c.length) + c;
 }
 
-export const getColor = (str: string) => `#${intToRGB(hashCode(str))}`;
+export const getColor = (str: string) => intToRGB(hashCode(str));
