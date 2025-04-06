@@ -3,6 +3,7 @@ import { analyzeAddField } from '@/utils/analyze/addField.ts';
 import { analyzeSet } from '@/utils/analyze/set.ts';
 import { analyzeUnset } from '@/utils/analyze/unset.ts';
 import { getColor } from '@/utils/getColor.ts';
+import { clone, last } from 'ramda';
 
 const DEFAULT_COLLECTION = 'Source';
 
@@ -53,36 +54,40 @@ export const isExpression = (v: object) =>
   Object.keys(v).some((v) => v.startsWith('$'));
 
 export const analyze = (aggregation: Aggregation) =>
-  aggregation.reduce<AnalysisResult>(
+  aggregation.reduce<[AnalysisResult]>(
     (state, stage, idx) => {
-      const arg = { state, collection: DEFAULT_COLLECTION, idx };
+      const lastState = clone(last(state));
+
+      const arg = { state: lastState, collection: DEFAULT_COLLECTION, idx };
 
       if ('$addFields' in stage) analyzeAddField({ ...arg, stage });
       if ('$set' in stage) analyzeSet({ ...arg, stage });
       if ('$unset' in stage) analyzeUnset({ ...arg, stage });
-
+      state.push(lastState);
       return state;
     },
-    {
-      collections: {
-        [DEFAULT_COLLECTION]: {
-          fields: {
-            _id: {
-              id: `${DEFAULT_COLLECTION}._id`,
-              type: FieldType.DEFAULT,
-              color: getColor(`${DEFAULT_COLLECTION}._id`),
-              status: [],
+    [
+      {
+        collections: {
+          [DEFAULT_COLLECTION]: {
+            fields: {
+              _id: {
+                id: `${DEFAULT_COLLECTION}._id`,
+                type: FieldType.DEFAULT,
+                color: getColor(`${DEFAULT_COLLECTION}._id`),
+                status: [],
+              },
             },
           },
         },
-      },
-      result: {
-        _id: {
-          id: `${DEFAULT_COLLECTION}._id`,
-          type: FieldType.DEFAULT,
-          color: getColor(`${DEFAULT_COLLECTION}._id`),
-          status: [],
+        result: {
+          _id: {
+            id: `${DEFAULT_COLLECTION}._id`,
+            type: FieldType.DEFAULT,
+            color: getColor(`${DEFAULT_COLLECTION}._id`),
+            status: [],
+          },
         },
       },
-    },
+    ],
   );

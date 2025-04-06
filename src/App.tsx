@@ -5,6 +5,7 @@ import { Result } from '@/containers/Result.tsx';
 import type { Aggregation } from '@/types/aggregation.ts';
 import { analyze } from '@/utils/analyze';
 import { Box, HStack, Heading, VStack } from '@chakra-ui/react';
+import { last } from 'ramda';
 import { useMemo, useState } from 'react';
 
 export const App = () => {
@@ -13,7 +14,7 @@ export const App = () => {
   const state = useMemo(() => {
     const res = analyze(value);
     console.dir(res);
-    return res;
+    return last(res);
   }, [value]);
 
   return (
