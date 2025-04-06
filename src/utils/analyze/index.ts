@@ -1,6 +1,7 @@
 import type { Aggregation } from '@/types/aggregation.ts';
 import { analyzeAddField } from '@/utils/analyze/addField.ts';
 import { analyzeUnset } from '@/utils/analyze/unset.ts';
+import { getColor } from '@/utils/getColor.ts';
 
 const DEFAULT_COLLECTION = 'Source';
 
@@ -10,6 +11,7 @@ export enum FieldType {
 
 export type FieldResult = {
   type: FieldType;
+  color: string;
 };
 
 export type Fields = {
@@ -27,9 +29,17 @@ export type AnalysisResult = {
 const createCollection = (res: AnalysisResult, name: string) => {
   if (res.collections[name]) return;
   res.collections[name] = {
-    fields: {},
+    fields: {
+      _id: {
+        type: FieldType.DEFAULT,
+        color: getColor(`${name}._id`),
+      },
+    },
   };
 };
+
+export const isFieldResult = (v: Fields | FieldResult): v is FieldResult =>
+  'type' in v;
 
 export const analyze = (aggregation: Aggregation) =>
   aggregation.reduce<AnalysisResult>(

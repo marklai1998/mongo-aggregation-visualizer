@@ -1,5 +1,6 @@
 import { useColorMode } from '@/components/ui/color-mode.tsx';
 import { type Aggregation, aggregation } from '@/types/aggregation.ts';
+import { Box } from '@chakra-ui/react';
 import MonacoEditor from '@monaco-editor/react';
 import Ajv from 'ajv';
 import JSON5 from 'json5';
@@ -13,6 +14,9 @@ type Props = {
 
 const defaultValue = `// Source.aggregate(
 [
+  {
+    $unset: ["a", "b.c"]
+  }
 ]
 // )
 `;
@@ -45,11 +49,13 @@ export const Editor = ({ onChange }: Props) => {
   }, [stringValue, onChange]);
 
   return (
-    <MonacoEditor
-      theme={colorMode === 'dark' ? 'vs-dark' : 'light'}
-      defaultLanguage="javascript"
-      value={stringValue}
-      onChange={setStringValue}
-    />
+    <Box h="full">
+      <MonacoEditor
+        theme={colorMode === 'dark' ? 'vs-dark' : 'light'}
+        defaultLanguage="javascript"
+        value={stringValue}
+        onChange={setStringValue}
+      />
+    </Box>
   );
 };

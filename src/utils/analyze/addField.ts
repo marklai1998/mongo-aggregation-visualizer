@@ -1,5 +1,6 @@
 import type { AddField } from '@/types/aggregation.ts';
 import { type AnalysisResult, FieldType } from '@/utils/analyze/index.ts';
+import { getColor } from '@/utils/getColor.ts';
 
 export const analyzeAddField = (
   state: AnalysisResult,
@@ -11,6 +12,7 @@ export const analyzeAddField = (
   for (const key of keys) {
     state.collections[baseCollection].fields[String(key)] = {
       type: FieldType.DEFAULT,
+      color: getColor(`${baseCollection}.${key}`),
     };
   }
 };
