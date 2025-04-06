@@ -1,7 +1,8 @@
 import type { Aggregation, Stage } from '@/types/aggregation.ts';
-import { analyzeAddField } from '@/utils/analyze/addField.ts';
-import { analyzeSet } from '@/utils/analyze/set.ts';
-import { analyzeUnset } from '@/utils/analyze/unset.ts';
+import { analyzeAddField } from '@/utils/analyze/stageAnalyzer/addField.ts';
+import { analyzeProject } from '@/utils/analyze/stageAnalyzer/project.ts';
+import { analyzeSet } from '@/utils/analyze/stageAnalyzer/set.ts';
+import { analyzeUnset } from '@/utils/analyze/stageAnalyzer/unset.ts';
 import { getColor } from '@/utils/getColor.ts';
 import { clone, last } from 'ramda';
 
@@ -49,10 +50,6 @@ export type StageAnalyzer<S extends Stage> = (arg: {
   idx: number;
 }) => void;
 
-export const isFieldResult = (v: Document | Field): v is Field => 'type' in v;
-export const isExpression = (v: object) =>
-  Object.keys(v).some((v) => v.startsWith('$'));
-
 export const analyze = (aggregation: Aggregation) =>
   aggregation.reduce<[AnalysisResult]>(
     (state, stage, idx) => {
@@ -63,6 +60,8 @@ export const analyze = (aggregation: Aggregation) =>
       if ('$addFields' in stage) analyzeAddField({ ...arg, stage });
       if ('$set' in stage) analyzeSet({ ...arg, stage });
       if ('$unset' in stage) analyzeUnset({ ...arg, stage });
+      if ('$project' in stage) analyzeProject({ ...arg, stage });
+
       state.push(lastState);
       return state;
     },

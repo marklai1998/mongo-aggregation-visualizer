@@ -22,7 +22,22 @@ export const set = Type.Object({
   ),
 });
 
-export const stage = Type.Union([addField, unset, set]);
+export const project = Type.Object({
+  $project: Type.Recursive((This) =>
+    Type.Mapped(Type.String({ minLength: 1 }), () =>
+      Type.Union([
+        Type.Literal(0),
+        Type.Literal(1),
+        Type.Literal(true),
+        Type.Literal(false),
+        Type.String(), // Treat as true
+        This,
+      ]),
+    ),
+  ),
+});
+
+export const stage = Type.Union([addField, unset, set, project]);
 
 export const aggregation = Type.Array(stage);
 
@@ -31,3 +46,4 @@ export type Stage = Static<typeof stage>;
 export type AddField = Static<typeof addField>;
 export type Unset = Static<typeof unset>;
 export type Set = Static<typeof set>;
+export type Project = Static<typeof project>;

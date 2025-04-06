@@ -28,7 +28,7 @@
 - [ ] $merge
 - [ ] $out
 - [ ] $planCacheStats
-- [ ] $project
+- [x] $project
 - [ ] $querySettings
 - [ ] $queryStats
 - [ ] $redact
@@ -45,3 +45,9 @@
 - [x] $unset
 - [ ] $unwind
 - [ ] $vectorSearch
+
+## TODO:
+
+- [ ] Expression support
+- [ ] Save state
+- [ ] Project grep prev set literal

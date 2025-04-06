@@ -3,8 +3,8 @@ import {
   type AnalysisResult,
   FieldType,
   type StageAnalyzer,
-  isExpression,
-} from '@/utils/analyze/index.ts';
+} from '@/utils/analyze';
+import { isExpression } from '@/utils/analyze/analyzeUtil.ts';
 import { getColor } from '@/utils/getColor.ts';
 import { assocPath } from 'ramda';
 

@@ -25,8 +25,6 @@ const darkOrLight = (hex: string) => {
   brightness = red * 299 + green * 587 + blue * 114;
   brightness = brightness / 255000;
 
-  console.log(hex, red, green, blue);
-
   // values range from 0 to 1
   // anything greater than 0.5 should be bright enough for dark text
   if (brightness >= 0.5) {
