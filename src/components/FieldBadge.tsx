@@ -11,7 +11,7 @@ export const FieldBadge = ({ field }: Props) => {
 
   return (
     <Badge
-      w="20px"
+      minW="20px"
       bg={field.color}
       {...(hoveringId === field.id ? { 'data-focus': true } : {})}
       focusRing="outside"
@@ -21,6 +21,8 @@ export const FieldBadge = ({ field }: Props) => {
       onMouseOut={() => {
         setHoveringId(null);
       }}
-    />
+    >
+      {field?.valueLiteral}
+    </Badge>
   );
 };

@@ -1,20 +1,53 @@
 import type { AddField } from '@/types/aggregation.ts';
-import { type AnalysisResult, FieldType } from '@/utils/analyze/index.ts';
+import {
+  type AnalysisResult,
+  FieldType,
+  type StageAnalyzer,
+} from '@/utils/analyze/index.ts';
 import { getColor } from '@/utils/getColor.ts';
+import { assocPath } from 'ramda';
 
-export const analyzeAddField = (
+export const addFieldRecursive = (
   state: AnalysisResult,
   baseCollection: string,
-  stage: AddField,
+  stage: AddField['$addFields'],
+  baseKey?: string,
 ) => {
-  const content = stage.$addFields;
-  const keys = Object.keys(content);
-  for (const key of keys) {
-    const id = `${baseCollection}.${key}`;
-    state.collections[baseCollection].fields[String(key)] = {
-      id,
-      type: FieldType.DEFAULT,
-      color: getColor(id),
-    };
+  // TODO: expression support
+  for (const [key, content] of Object.entries(stage)) {
+    if (content === null || content === undefined) continue;
+    if (typeof content === 'object') {
+      addFieldRecursive(
+        state,
+        baseCollection,
+        content,
+        baseKey ? `${baseKey}.${key}` : key,
+      );
+    } else {
+      const path = baseKey ? `${baseKey}.${key}` : key;
+      // Add field is not form any collection
+      // TODO: prevent collection called tmp
+      const id = `tmp.${path}`;
+
+      state.result = assocPath(
+        path.split('.'),
+        {
+          id,
+          type: FieldType.DEFAULT,
+          color: getColor(id),
+          valueLiteral: String(content),
+        },
+        state.result,
+      );
+    }
   }
+};
+
+export const analyzeAddField: StageAnalyzer<AddField> = ({
+  state,
+  collection,
+  stage,
+}) => {
+  const content = stage.$addFields;
+  addFieldRecursive(state, collection, content);
 };

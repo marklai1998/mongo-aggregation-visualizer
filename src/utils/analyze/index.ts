@@ -1,4 +1,4 @@
-import type { Aggregation } from '@/types/aggregation.ts';
+import type { Aggregation, Stage } from '@/types/aggregation.ts';
 import { analyzeAddField } from '@/utils/analyze/addField.ts';
 import { analyzeUnset } from '@/utils/analyze/unset.ts';
 import { getColor } from '@/utils/getColor.ts';
@@ -13,6 +13,7 @@ export type FieldResult = {
   id: string;
   type: FieldType;
   color: string;
+  valueLiteral?: string;
 };
 
 export type Fields = {
@@ -29,6 +30,12 @@ export type AnalysisResult = {
     [fieldName: string]: FieldResult;
   };
 };
+
+export type StageAnalyzer<S extends Stage> = (arg: {
+  state: AnalysisResult;
+  collection: string;
+  stage: S;
+}) => void;
 
 const createCollection = (res: AnalysisResult, name: string) => {
   if (res.collections[name]) return;
@@ -50,15 +57,15 @@ export const isFieldResult = (v: Fields | FieldResult): v is FieldResult =>
 
 export const analyze = (aggregation: Aggregation) =>
   aggregation.reduce<AnalysisResult>(
-    (acc, stage) => {
-      createCollection(acc, DEFAULT_COLLECTION);
+    (state, stage) => {
+      createCollection(state, DEFAULT_COLLECTION);
 
-      if ('$addFields' in stage)
-        analyzeAddField(acc, DEFAULT_COLLECTION, stage);
+      const arg = { state, collection: DEFAULT_COLLECTION };
 
-      if ('$unset' in stage) analyzeUnset(acc, DEFAULT_COLLECTION, stage);
+      if ('$addFields' in stage) analyzeAddField({ ...arg, stage });
+      if ('$unset' in stage) analyzeUnset({ ...arg, stage });
 
-      return acc;
+      return state;
     },
     {
       collections: {},
