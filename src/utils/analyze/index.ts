@@ -8,21 +8,25 @@ export enum FieldType {
   DEFAULT = 'DEFAULT',
 }
 
+export type FieldResult = {
+  type: FieldType;
+};
+
+export type Fields = {
+  [fieldName: string]: FieldResult | Fields;
+};
+
 export type AnalysisResult = {
-  collection: {
+  collections: {
     [collectionName: string]: {
-      fields: {
-        [fieldName: string]: {
-          type: FieldType;
-        };
-      };
+      fields: Fields;
     };
   };
 };
 
 const createCollection = (res: AnalysisResult, name: string) => {
-  if (res.collection[name]) return;
-  res.collection[name] = {
+  if (res.collections[name]) return;
+  res.collections[name] = {
     fields: {},
   };
 };
@@ -39,5 +43,5 @@ export const analyze = (aggregation: Aggregation) =>
 
       return acc;
     },
-    { collection: {} },
+    { collections: {} },
   );

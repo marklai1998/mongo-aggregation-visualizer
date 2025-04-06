@@ -1,5 +1,6 @@
 import type { Unset } from '@/types/aggregation.ts';
 import { type AnalysisResult, FieldType } from '@/utils/analyze/index.ts';
+import { assocPath } from 'ramda';
 
 export const analyzeUnset = (
   state: AnalysisResult,
@@ -9,8 +10,10 @@ export const analyzeUnset = (
   const content = stage.$unset;
 
   for (const key of typeof content === 'string' ? [content] : content) {
-    state.collection[baseCollection].fields[key] = {
-      type: FieldType.DEFAULT,
-    };
+    state.collections[baseCollection].fields = assocPath(
+      key.split('.'),
+      { type: FieldType.DEFAULT },
+      state.collections[baseCollection].fields,
+    );
   }
 };

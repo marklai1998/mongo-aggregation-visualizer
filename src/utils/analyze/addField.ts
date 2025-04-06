@@ -9,7 +9,7 @@ export const analyzeAddField = (
   const content = stage.$addFields;
   const keys = Object.keys(content);
   for (const key of keys) {
-    state.collection[baseCollection].fields[String(key)] = {
+    state.collections[baseCollection].fields[String(key)] = {
       type: FieldType.DEFAULT,
     };
   }
