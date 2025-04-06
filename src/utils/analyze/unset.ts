@@ -8,15 +8,9 @@ export const analyzeUnset = (
 ) => {
   const content = stage.$unset;
 
-  if (typeof content === 'string') {
-    state.collection[baseCollection].fields[content] = {
+  for (const key of typeof content === 'string' ? [content] : content) {
+    state.collection[baseCollection].fields[key] = {
       type: FieldType.DEFAULT,
     };
-  } else {
-    for (const key of content) {
-      state.collection[baseCollection].fields[String(key)] = {
-        type: FieldType.DEFAULT,
-      };
-    }
   }
 };
