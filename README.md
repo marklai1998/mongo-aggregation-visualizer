@@ -50,4 +50,3 @@
 
 - [ ] Expression support
 - [ ] Save state
-- [ ] Project grep prev set literal

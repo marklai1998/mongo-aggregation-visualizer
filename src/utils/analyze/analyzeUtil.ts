@@ -69,16 +69,16 @@ export const addField = ({
   collection: string;
   content: object;
 }) => {
-  const id = `${collection}.${path}`;
   const expression = isExpression(content);
 
-  if (
-    !isTmpField({
-      state,
-      collection,
-      path,
-    })
-  ) {
+  const tmp = isTmpField({
+    state,
+    collection,
+    path,
+  });
+  const id = tmp ? `tmp.${path}` : `${collection}.${path}`;
+
+  if (!tmp) {
     state.collections[collection].fields = assocPath(
       path.split('.'),
       {
@@ -89,23 +89,22 @@ export const addField = ({
       },
       state.collections[collection].fields,
     );
+    state.result = assocPath(
+      path.split('.'),
+      {
+        id,
+        type: FieldType.DEFAULT,
+        color: getColor(id),
+        status: expression
+          ? [
+              {
+                isExpression: true,
+                expression: content,
+              },
+            ]
+          : [],
+      },
+      state.result,
+    );
   }
-
-  state.result = assocPath(
-    path.split('.'),
-    {
-      id,
-      type: FieldType.DEFAULT,
-      color: getColor(id),
-      status: expression
-        ? [
-            {
-              isExpression: true,
-              expression: content,
-            },
-          ]
-        : [],
-    },
-    state.result,
-  );
 };
