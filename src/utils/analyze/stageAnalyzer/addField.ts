@@ -55,8 +55,7 @@ export const addFieldRecursive = (
 export const analyzeAddField: StageAnalyzer<AddField> = ({
   state,
   collection,
-  stage,
+  stage: { $addFields: stage },
 }) => {
-  const content = stage.$addFields;
-  addFieldRecursive(state, collection, content);
+  addFieldRecursive(state, collection, stage);
 };

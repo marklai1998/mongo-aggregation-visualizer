@@ -5,12 +5,10 @@ import { removeField } from '@/utils/analyze/analyzeUtil.ts';
 export const analyzeUnset: StageAnalyzer<Unset> = ({
   state,
   collection,
-  stage,
+  stage: { $unset: stage },
   idx,
 }) => {
-  const content = stage.$unset;
-
-  for (const key of typeof content === 'string' ? [content] : content) {
+  for (const key of typeof stage === 'string' ? [stage] : stage) {
     const path = key;
 
     removeField({

@@ -55,9 +55,8 @@ export const projectRecursive = ({
 export const analyzeProject: StageAnalyzer<Project> = ({
   state,
   collection,
-  stage,
+  stage: { $project: stage },
   idx,
 }) => {
-  const content = stage.$project;
-  projectRecursive({ state, collection, stage: content, idx });
+  projectRecursive({ state, collection, stage, idx });
 };
