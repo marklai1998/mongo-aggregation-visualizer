@@ -1,6 +1,7 @@
 import { Tooltip } from '@/components/ui/tooltip.tsx';
 import { useHoveringField } from '@/hooks/useHoveringField.ts';
 import type { Field } from '@/utils/analyze';
+import { getColor } from '@/utils/getColor.ts';
 import { Badge, HStack, IconButton } from '@chakra-ui/react';
 import { Fragment } from 'react';
 import { AiOutlineDelete, AiOutlineFunction } from 'react-icons/ai';
@@ -36,14 +37,16 @@ const darkOrLight = (hex: string) => {
 export const FieldBadge = ({ field }: Props) => {
   const { hoveringId, setHoveringId } = useHoveringField();
 
+  const color = getColor(`${String(field.id.collection)}.${field.id.path}`);
+
   return (
     <HStack>
       <Badge
         minW="40px"
-        bg={`#${field.color}`}
+        bg={`#${color}`}
         {...(hoveringId === field.id ? { 'data-focus': true } : {})}
         focusRing="outside"
-        color={darkOrLight(field.color) === 'dark' ? 'black' : 'white'}
+        color={darkOrLight(color) === 'dark' ? 'black' : 'white'}
         onMouseOver={() => {
           setHoveringId(field.id);
         }}

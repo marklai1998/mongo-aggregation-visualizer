@@ -3,10 +3,10 @@ import { analyzeAddField } from '@/utils/analyze/stageAnalyzer/addField.ts';
 import { analyzeProject } from '@/utils/analyze/stageAnalyzer/project.ts';
 import { analyzeSet } from '@/utils/analyze/stageAnalyzer/set.ts';
 import { analyzeUnset } from '@/utils/analyze/stageAnalyzer/unset.ts';
-import { getColor } from '@/utils/getColor.ts';
 import { clone, last } from 'ramda';
 
-const DEFAULT_COLLECTION = 'Source';
+export const DEFAULT_COLLECTION = 'Source';
+export const TMP_COLLECTION = Symbol('TMP');
 
 export enum FieldType {
   DEFAULT = 'DEFAULT',
@@ -22,10 +22,14 @@ export type FieldState =
       expression: string;
     };
 
+export type FieldId = {
+  collection: string | symbol;
+  path: string;
+};
+
 export type Field = {
-  id: string;
+  id: FieldId;
   type: FieldType;
-  color: string;
   valueLiteral?: string;
   status: FieldState[];
 };
@@ -71,9 +75,11 @@ export const analyze = (aggregation: Aggregation) =>
           [DEFAULT_COLLECTION]: {
             fields: {
               _id: {
-                id: `${DEFAULT_COLLECTION}._id`,
+                id: {
+                  collection: DEFAULT_COLLECTION,
+                  path: '_id',
+                },
                 type: FieldType.DEFAULT,
-                color: getColor(`${DEFAULT_COLLECTION}._id`),
                 status: [],
               },
             },
@@ -81,9 +87,11 @@ export const analyze = (aggregation: Aggregation) =>
         },
         result: {
           _id: {
-            id: `${DEFAULT_COLLECTION}._id`,
+            id: {
+              collection: DEFAULT_COLLECTION,
+              path: '_id',
+            },
             type: FieldType.DEFAULT,
-            color: getColor(`${DEFAULT_COLLECTION}._id`),
             status: [],
           },
         },

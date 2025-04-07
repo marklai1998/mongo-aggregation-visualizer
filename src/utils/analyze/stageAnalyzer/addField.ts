@@ -3,9 +3,9 @@ import {
   type AnalysisResult,
   FieldType,
   type StageAnalyzer,
+  TMP_COLLECTION,
 } from '@/utils/analyze';
 import { isExpression } from '@/utils/analyze/analyzeUtil.ts';
-import { getColor } from '@/utils/getColor.ts';
 import { assocPath } from 'ramda';
 
 export const addFieldRecursive = (
@@ -25,17 +25,17 @@ export const addFieldRecursive = (
       );
     } else {
       const path = baseKey ? `${baseKey}.${key}` : key;
-      // Add field is not form any collection
-      // TODO: prevent collection called tmp
-      const id = `tmp.${path}`;
+
       const expression = isExpression(content);
 
       state.result = assocPath(
         path.split('.'),
         {
-          id,
+          id: {
+            collection: TMP_COLLECTION,
+            path,
+          },
           type: FieldType.DEFAULT,
-          color: getColor(id),
           valueLiteral: expression ? undefined : String(content),
           status: expression
             ? [

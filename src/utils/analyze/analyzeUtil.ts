@@ -4,7 +4,6 @@ import {
   type Field,
   FieldType,
 } from '@/utils/analyze/index.ts';
-import { getColor } from '@/utils/getColor.ts';
 import { assocPath, dissocPath, hasPath } from 'ramda';
 
 export const isTmpField = ({
@@ -34,8 +33,6 @@ export const removeField = ({
   collection: string;
   idx: number;
 }) => {
-  const id = `${collection}.${path}`;
-
   if (
     !isTmpField({
       state,
@@ -46,9 +43,11 @@ export const removeField = ({
     state.collections[collection].fields = assocPath(
       path.split('.'),
       {
-        id,
+        id: {
+          collection,
+          path,
+        },
         type: FieldType.DEFAULT,
-        color: getColor(id),
         status: [{ isUnseted: true, step: idx }],
       },
       state.collections[collection].fields,
@@ -76,15 +75,16 @@ export const addField = ({
     collection,
     path,
   });
-  const id = tmp ? `tmp.${path}` : `${collection}.${path}`;
 
   if (!tmp) {
     state.collections[collection].fields = assocPath(
       path.split('.'),
       {
-        id,
+        id: {
+          collection,
+          path,
+        },
         type: FieldType.DEFAULT,
-        color: getColor(id),
         status: [],
       },
       state.collections[collection].fields,
@@ -92,9 +92,11 @@ export const addField = ({
     state.result = assocPath(
       path.split('.'),
       {
-        id,
+        id: {
+          collection,
+          path,
+        },
         type: FieldType.DEFAULT,
-        color: getColor(id),
         status: expression
           ? [
               {
