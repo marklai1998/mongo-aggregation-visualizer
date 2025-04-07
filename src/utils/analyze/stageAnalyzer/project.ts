@@ -8,7 +8,16 @@ import {
 import { isExpression, isTmpField } from '@/utils/analyze/analyzeUtil.ts';
 import { analyzeUnset } from '@/utils/analyze/stageAnalyzer/unset.ts';
 import { flatten } from 'flat';
-import { assocPath, clone, dissocPath, omit } from 'ramda';
+import {
+  assocPath,
+  clone,
+  dissocPath,
+  omit,
+  path as pathFn,
+  pick,
+} from 'ramda';
+
+type ExtendedState = State & { newResult: State['result'] };
 
 export const projectRecursive = ({
   state,
@@ -17,12 +26,12 @@ export const projectRecursive = ({
   baseKey,
   idx,
 }: {
-  state: State;
+  state: ExtendedState;
   collection: string;
   stage: Project['$project'];
   baseKey?: string;
   idx: number;
-}): State =>
+}): ExtendedState =>
   Object.entries(stage).reduce((state, [key, content]) => {
     if (content === null || content === undefined) return state;
 
@@ -61,54 +70,35 @@ export const projectRecursive = ({
           },
           state.collections[collection].fields,
         );
-        state.result = assocPath(
-          path.split('.'),
-          {
-            _type: FIELD_SYMBOL,
-            id: {
-              collection,
-              path,
-            },
-            type: FieldType.DEFAULT,
-            status: expression
-              ? [
-                  {
-                    isExpression: true,
-                    expression: content,
-                  },
-                ]
-              : [],
-          },
-          state.result,
-        );
       }
 
-      return state;
-    }
-
-    if (
-      !isTmpField({
-        state,
-        collection,
-        path,
-      })
-    ) {
-      state.collections[collection].fields = assocPath(
+      state.newResult = assocPath(
         path.split('.'),
-        {
+        pathFn(path.split('.'), state.result) ?? {
           _type: FIELD_SYMBOL,
           id: {
             collection,
             path,
           },
           type: FieldType.DEFAULT,
-          status: [{ isUnseted: true, step: idx }],
+          status: expression
+            ? [
+                {
+                  isExpression: true,
+                  expression: content,
+                },
+              ]
+            : [],
         },
-        state.collections[collection].fields,
+        state.newResult,
       );
+
+      return state;
     }
 
-    state.result = dissocPath(path.split('.'), state.result);
+    if (key === '_id') {
+      state.newResult = dissocPath(key.split('.'), state.newResult);
+    }
 
     return state;
   }, clone(state));
@@ -136,6 +126,18 @@ export const analyzeProject: StageAnalyzer<Project> = ({
       idx,
     });
   }
-  // TODO: proper include mode
-  return projectRecursive({ state, collection, stage, idx });
+
+  const newState = projectRecursive({
+    state: {
+      ...state,
+      newResult: pick(['_id'], state.result),
+    },
+    collection,
+    stage,
+    idx,
+  });
+
+  newState.result = newState.newResult;
+
+  return omit(['newResult'], newState);
 };
