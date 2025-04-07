@@ -127,10 +127,12 @@ export const analyzeProject: StageAnalyzer<Project> = ({
     });
   }
 
+  const clonedState = clone(state);
+
   const newState = projectRecursive({
     state: {
-      ...state,
-      newResult: pick(['_id'], state.result),
+      ...clonedState,
+      newResult: pick(['_id'], clonedState.result),
     },
     collection,
     stage,
