@@ -1,9 +1,9 @@
 import { Document } from '@/components/Document.tsx';
-import type { AnalysisResult } from '@/utils/analyze';
+import type { State } from '@/utils/analyze';
 import { Box } from '@chakra-ui/react';
 
 type Props = {
-  state: AnalysisResult;
+  state: State;
 };
 
 export const Collections = ({ state: { collections } }: Props) => {

@@ -6,6 +6,4 @@ export const analyzeSet: StageAnalyzer<SetStage> = ({
   state,
   collection,
   stage: { $set: stage },
-}) => {
-  addFieldRecursive(state, collection, stage);
-};
+}) => addFieldRecursive(state, collection, stage);

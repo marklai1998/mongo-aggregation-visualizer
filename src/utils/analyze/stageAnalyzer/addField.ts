@@ -1,61 +1,60 @@
 import type { AddField } from '@/types/aggregation.ts';
 import {
-  type AnalysisResult,
   FieldType,
   type StageAnalyzer,
+  type State,
   TMP_COLLECTION,
 } from '@/utils/analyze';
 import { isExpression } from '@/utils/analyze/analyzeUtil.ts';
-import { assocPath } from 'ramda';
+import { assocPath, clone } from 'ramda';
 
 export const addFieldRecursive = (
-  state: AnalysisResult,
+  state: State,
   baseCollection: string,
   stage: AddField['$addFields'],
   baseKey?: string,
-) => {
-  for (const [key, content] of Object.entries(stage)) {
-    if (content === null || content === undefined) continue;
+): State =>
+  Object.entries(stage).reduce((state, [key, content]) => {
+    if (content === null || content === undefined) return state;
     if (typeof content === 'object' && !isExpression(content)) {
-      addFieldRecursive(
+      return addFieldRecursive(
         state,
         baseCollection,
         content,
         baseKey ? `${baseKey}.${key}` : key,
       );
-    } else {
-      const path = baseKey ? `${baseKey}.${key}` : key;
-
-      const expression = isExpression(content);
-
-      state.result = assocPath(
-        path.split('.'),
-        {
-          id: {
-            collection: TMP_COLLECTION,
-            path,
-          },
-          type: FieldType.DEFAULT,
-          valueLiteral: expression ? undefined : String(content),
-          status: expression
-            ? [
-                {
-                  isExpression: true,
-                  expression: content,
-                },
-              ]
-            : [],
-        },
-        state.result,
-      );
     }
-  }
-};
+
+    const path = baseKey ? `${baseKey}.${key}` : key;
+
+    const expression = isExpression(content);
+
+    state.result = assocPath(
+      path.split('.'),
+      {
+        id: {
+          collection: TMP_COLLECTION,
+          path,
+        },
+        type: FieldType.DEFAULT,
+        valueLiteral: expression ? undefined : String(content),
+        status: expression
+          ? [
+              {
+                isExpression: true,
+                expression: content,
+              },
+            ]
+          : [],
+      },
+      state.result,
+    );
+
+    return state;
+  }, clone(state));
 
 export const analyzeAddField: StageAnalyzer<AddField> = ({
   state,
   collection,
   stage: { $addFields: stage },
-}) => {
-  addFieldRecursive(state, collection, stage);
-};
+}) => addFieldRecursive(state, collection, stage);

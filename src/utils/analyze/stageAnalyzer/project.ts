@@ -1,10 +1,7 @@
 import type { Project } from '@/types/aggregation.ts';
-import type { AnalysisResult, StageAnalyzer } from '@/utils/analyze';
-import {
-  addField,
-  isExpression,
-  removeField,
-} from '@/utils/analyze/analyzeUtil.ts';
+import { FieldType, type StageAnalyzer, type State } from '@/utils/analyze';
+import { isExpression, isTmpField } from '@/utils/analyze/analyzeUtil.ts';
+import { assocPath, clone, dissocPath } from 'ramda';
 
 export const projectRecursive = ({
   state,
@@ -13,50 +10,102 @@ export const projectRecursive = ({
   baseKey,
   idx,
 }: {
-  state: AnalysisResult;
+  state: State;
   collection: string;
   stage: Project['$project'];
   baseKey?: string;
   idx: number;
-}) => {
-  for (const [key, content] of Object.entries(stage)) {
-    if (content === null || content === undefined) continue;
+}): State =>
+  Object.entries(stage).reduce((state, [key, content]) => {
+    if (content === null || content === undefined) return state;
 
     const path = baseKey ? `${baseKey}.${key}` : key;
 
     if (typeof content === 'object' && !isExpression(content)) {
-      projectRecursive({
+      return projectRecursive({
         state,
         collection,
         stage: content,
         baseKey: path,
         idx,
       });
-    } else {
-      if (content) {
-        addField({
-          state,
-          path,
-          collection: collection,
-          content,
-        });
-      } else {
-        removeField({
-          state,
-          path,
-          collection: collection,
-          idx,
-        });
-      }
     }
-  }
-};
+
+    if (content) {
+      const expression = isExpression(content);
+
+      const tmp = isTmpField({
+        state,
+        collection,
+        path,
+      });
+
+      if (!tmp) {
+        state.collections[collection].fields = assocPath(
+          path.split('.'),
+          {
+            id: {
+              collection,
+              path,
+            },
+            type: FieldType.DEFAULT,
+            status: [],
+          },
+          state.collections[collection].fields,
+        );
+        state.result = assocPath(
+          path.split('.'),
+          {
+            id: {
+              collection,
+              path,
+            },
+            type: FieldType.DEFAULT,
+            status: expression
+              ? [
+                  {
+                    isExpression: true,
+                    expression: content,
+                  },
+                ]
+              : [],
+          },
+          state.result,
+        );
+      }
+
+      return state;
+    }
+
+    if (
+      !isTmpField({
+        state,
+        collection,
+        path,
+      })
+    ) {
+      state.collections[collection].fields = assocPath(
+        path.split('.'),
+        {
+          id: {
+            collection,
+            path,
+          },
+          type: FieldType.DEFAULT,
+          status: [{ isUnseted: true, step: idx }],
+        },
+        state.collections[collection].fields,
+      );
+    }
+
+    state.result = dissocPath(path.split('.'), state.result);
+
+    return state;
+  }, clone(state));
 
 export const analyzeProject: StageAnalyzer<Project> = ({
   state,
   collection,
   stage: { $project: stage },
   idx,
-}) => {
-  projectRecursive({ state, collection, stage, idx });
-};
+}) => projectRecursive({ state, collection, stage, idx });
