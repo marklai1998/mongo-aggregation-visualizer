@@ -50,6 +50,7 @@ export const projectRecursive = ({
     if (content) {
       const expression = isExpression(content);
 
+      // TODO: fix nested tmp field project parent
       if (
         !isTmpField({
           state,
