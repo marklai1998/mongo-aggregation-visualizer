@@ -20,7 +20,9 @@ export const App = () => {
   return (
     <VStack h="svh" w="full" gap={0}>
       <HStack borderBottomWidth={1} w="full" p={1}>
-        <Box w="full">Mongo Aggregation Visualizer</Box>
+        <Box w="full" px="2">
+          Mongo Aggregation Visualizer
+        </Box>
         <ColorModeButton />
       </HStack>
       <HStack w="full" h="full" flex={1} alignItems="start" gap="0">
