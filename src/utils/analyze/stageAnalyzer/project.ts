@@ -6,7 +6,9 @@ import {
   type State,
 } from '@/utils/analyze';
 import { isExpression, isTmpField } from '@/utils/analyze/analyzeUtil.ts';
-import { assocPath, clone, dissocPath } from 'ramda';
+import { analyzeUnset } from '@/utils/analyze/stageAnalyzer/unset.ts';
+import { flatten } from 'flat';
+import { assocPath, clone, dissocPath, omit } from 'ramda';
 
 export const projectRecursive = ({
   state,
@@ -116,4 +118,24 @@ export const analyzeProject: StageAnalyzer<Project> = ({
   collection,
   stage: { $project: stage },
   idx,
-}) => projectRecursive({ state, collection, stage, idx });
+}) => {
+  const flattedStage = flatten<object, { _id?: number }>(stage);
+
+  if (Object.values(omit(['_id'], flattedStage)).some((v) => !v)) {
+    // Exclusion mode take the priority
+    // https://www.mongodb.com/docs/manual/reference/operator/aggregation/project/#syntax
+
+    return analyzeUnset({
+      state,
+      collection,
+      stage: {
+        $unset: Object.entries(flattedStage)
+          .filter(([, v]) => !v)
+          .map(([k]) => k),
+      },
+      idx,
+    });
+  }
+  // TODO: proper include mode
+  return projectRecursive({ state, collection, stage, idx });
+};
