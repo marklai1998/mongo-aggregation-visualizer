@@ -50,13 +50,12 @@ export const projectRecursive = ({
     if (content) {
       const expression = isExpression(content);
 
-      const tmp = isTmpField({
-        state,
-        collection,
-        path,
-      });
-
-      if (!tmp) {
+      if (
+        !isTmpField({
+          state,
+          path,
+        })
+      ) {
         state.collections[collection].fields = assocPath(
           path.split('.'),
           {

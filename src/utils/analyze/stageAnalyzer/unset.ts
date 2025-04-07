@@ -13,7 +13,6 @@ export const analyzeUnset: StageAnalyzer<Unset> = ({
     if (
       !isTmpField({
         state,
-        collection,
         path: key,
       })
     ) {
