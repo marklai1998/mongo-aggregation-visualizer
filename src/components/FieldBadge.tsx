@@ -3,6 +3,7 @@ import { useHoveringField } from '@/hooks/useHoveringField.ts';
 import type { Field } from '@/utils/analyze';
 import { getColor } from '@/utils/getColor.ts';
 import { Badge, HStack, IconButton } from '@chakra-ui/react';
+import { equals } from 'ramda';
 import { Fragment } from 'react';
 import { AiOutlineDelete, AiOutlineFunction } from 'react-icons/ai';
 
@@ -44,7 +45,7 @@ export const FieldBadge = ({ field }: Props) => {
       <Badge
         minW="40px"
         bg={`#${color}`}
-        {...(hoveringId === field.id ? { 'data-focus': true } : {})}
+        {...(equals(hoveringId, field.id) ? { 'data-focus': true } : {})}
         focusRing="outside"
         color={darkOrLight(color) === 'dark' ? 'black' : 'white'}
         onMouseOver={() => {
