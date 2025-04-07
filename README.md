@@ -5,6 +5,7 @@
 ### Stages
 
 - [x] $addFields
+  - [ ] Expression
 - [ ] $bucket
 - [ ] $bucketAuto
 - [ ] $changeStream
@@ -29,6 +30,7 @@
 - [ ] $out
 - [ ] $planCacheStats
 - [x] $project
+  - [ ] Expression
 - [ ] $querySettings
 - [ ] $queryStats
 - [ ] $redact
@@ -37,6 +39,7 @@
 - [ ] $search
 - [ ] $searchMeta
 - [x] $set
+  - [ ] Expression
 - [ ] $setWindowFields
 - [ ] $skip
 - [ ] $sort
