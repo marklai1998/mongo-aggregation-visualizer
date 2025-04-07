@@ -5,7 +5,11 @@ import { getColor } from '@/utils/getColor.ts';
 import { Badge, HStack, IconButton } from '@chakra-ui/react';
 import { equals } from 'ramda';
 import { Fragment } from 'react';
-import { AiOutlineDelete, AiOutlineFunction } from 'react-icons/ai';
+import {
+  AiOutlineClear,
+  AiOutlineFieldString,
+  AiOutlineFunction,
+} from 'react-icons/ai';
 
 type Props = {
   field: Field;
@@ -43,7 +47,7 @@ export const FieldBadge = ({ field }: Props) => {
   return (
     <HStack>
       <Badge
-        minW="40px"
+        minW={field?.valueLiteral ? undefined : '40px'}
         bg={`#${color}`}
         {...(equals(hoveringId, field.id) ? { 'data-focus': true } : {})}
         focusRing="outside"
@@ -55,6 +59,7 @@ export const FieldBadge = ({ field }: Props) => {
           setHoveringId(null);
         }}
       >
+        {field?.valueLiteral && <AiOutlineFieldString />}
         {field?.valueLiteral}
       </Badge>
       {field.status.map((status, idx) => {
@@ -68,7 +73,7 @@ export const FieldBadge = ({ field }: Props) => {
               key={idx}
             >
               <IconButton size="2xs" variant="ghost" colorPalette="red">
-                <AiOutlineDelete />
+                <AiOutlineClear />
               </IconButton>
             </Tooltip>
           );
