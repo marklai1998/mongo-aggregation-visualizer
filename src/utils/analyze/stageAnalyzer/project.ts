@@ -1,5 +1,10 @@
 import type { Project } from '@/types/aggregation.ts';
-import { FieldType, type StageAnalyzer, type State } from '@/utils/analyze';
+import {
+  FIELD_SYMBOL,
+  FieldType,
+  type StageAnalyzer,
+  type State,
+} from '@/utils/analyze';
 import { isExpression, isTmpField } from '@/utils/analyze/analyzeUtil.ts';
 import { assocPath, clone, dissocPath } from 'ramda';
 
@@ -44,6 +49,7 @@ export const projectRecursive = ({
         state.collections[collection].fields = assocPath(
           path.split('.'),
           {
+            _type: FIELD_SYMBOL,
             id: {
               collection,
               path,
@@ -56,6 +62,7 @@ export const projectRecursive = ({
         state.result = assocPath(
           path.split('.'),
           {
+            _type: FIELD_SYMBOL,
             id: {
               collection,
               path,
@@ -87,6 +94,7 @@ export const projectRecursive = ({
       state.collections[collection].fields = assocPath(
         path.split('.'),
         {
+          _type: FIELD_SYMBOL,
           id: {
             collection,
             path,

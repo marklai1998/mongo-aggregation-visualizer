@@ -7,7 +7,7 @@ import { last } from 'ramda';
 
 export const DEFAULT_COLLECTION = 'Source';
 export const TMP_COLLECTION = Symbol('TMP');
-
+export const FIELD_SYMBOL = Symbol('FIELD');
 export enum FieldType {
   DEFAULT = 'DEFAULT',
 }
@@ -28,6 +28,7 @@ export type FieldId = {
 };
 
 export type Field = {
+  _type: typeof FIELD_SYMBOL;
   id: FieldId;
   type: FieldType;
   valueLiteral?: string;
@@ -85,6 +86,7 @@ export const analyze = (aggregation: Aggregation) =>
           [DEFAULT_COLLECTION]: {
             fields: {
               _id: {
+                _type: FIELD_SYMBOL,
                 id: {
                   collection: DEFAULT_COLLECTION,
                   path: '_id',
@@ -97,6 +99,7 @@ export const analyze = (aggregation: Aggregation) =>
         },
         result: {
           _id: {
+            _type: FIELD_SYMBOL,
             id: {
               collection: DEFAULT_COLLECTION,
               path: '_id',

@@ -1,5 +1,6 @@
 import type { AddField } from '@/types/aggregation.ts';
 import {
+  FIELD_SYMBOL,
   FieldType,
   type StageAnalyzer,
   type State,
@@ -32,6 +33,7 @@ export const addFieldRecursive = (
     state.result = assocPath(
       path.split('.'),
       {
+        _type: FIELD_SYMBOL,
         id: {
           collection: TMP_COLLECTION,
           path,
