@@ -3,7 +3,7 @@ import {
   type Field,
   type State,
   TMP_COLLECTION,
-} from '@/utils/analyze/index.ts';
+} from '@/utils/oldAnalyze/index.ts';
 import { path as pathFn } from 'ramda';
 
 export const isTmpField = ({
@@ -23,5 +23,5 @@ export const isFieldResult = (v: unknown): v is Field =>
   '_type' in v &&
   v._type === FIELD_SYMBOL;
 
-export const isExpression = (v: object) =>
-  Object.keys(v).some((v) => v.startsWith('$'));
+export const isExpression = (v: unknown) =>
+  v && typeof v === 'object' && Object.keys(v).some((v) => v.startsWith('$'));

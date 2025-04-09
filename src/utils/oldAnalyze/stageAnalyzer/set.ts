@@ -1,6 +1,6 @@
 import type { Set as SetStage } from '@/types/aggregation.ts';
-import type { StageAnalyzer } from '@/utils/analyze';
-import { addFieldRecursive } from '@/utils/analyze/stageAnalyzer/addField.ts';
+import { addFieldRecursive } from '@/utils/oldAnalyze/stageAnalyzer/addField.ts';
+import type { StageAnalyzer } from '..';
 
 export const analyzeSet: StageAnalyzer<SetStage> = ({
   state,

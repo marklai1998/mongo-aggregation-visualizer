@@ -1,13 +1,13 @@
 import type { AddField } from '@/types/aggregation.ts';
+import { isExpression } from '@/utils/oldAnalyze/analyzeUtil.ts';
+import { assocPath, clone } from 'ramda';
 import {
   FIELD_SYMBOL,
   FieldType,
   type StageAnalyzer,
   type State,
   TMP_COLLECTION,
-} from '@/utils/analyze';
-import { isExpression } from '@/utils/analyze/analyzeUtil.ts';
-import { assocPath, clone } from 'ramda';
+} from '..';
 
 export const addFieldRecursive = (
   state: State,

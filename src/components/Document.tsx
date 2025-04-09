@@ -1,7 +1,7 @@
 import { FieldBadge } from '@/components/FieldBadge.tsx';
-import type { Document as MongoDocument } from '@/utils/analyze';
-import { isFieldResult } from '@/utils/analyze/analyzeUtil.ts';
+import { isFieldResult } from '@/utils/newAnalyze/analyzeUtil.ts';
 import { Card, DataList } from '@chakra-ui/react';
+import type { Document as MongoDocument } from '../utils/newAnalyze';
 
 type Props = {
   document: MongoDocument;

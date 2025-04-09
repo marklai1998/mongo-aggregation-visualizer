@@ -1,7 +1,7 @@
 import type { Unset } from '@/types/aggregation.ts';
-import { FIELD_SYMBOL, FieldType, type StageAnalyzer } from '@/utils/analyze';
-import { isTmpField } from '@/utils/analyze/analyzeUtil.ts';
+import { isTmpField } from '@/utils/oldAnalyze/analyzeUtil.ts';
 import { assocPath, clone, dissocPath } from 'ramda';
+import { FIELD_SYMBOL, FieldType, type StageAnalyzer } from '..';
 
 export const analyzeUnset: StageAnalyzer<Unset> = ({
   state,

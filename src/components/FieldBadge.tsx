@@ -1,15 +1,9 @@
-import { Tooltip } from '@/components/ui/tooltip.tsx';
 import { useHoveringField } from '@/hooks/useHoveringField.ts';
-import type { Field } from '@/utils/analyze';
 import { getColor } from '@/utils/getColor.ts';
-import { Badge, HStack, IconButton } from '@chakra-ui/react';
+import { type Field, ValueType } from '@/utils/newAnalyze';
+import { Badge, HStack } from '@chakra-ui/react';
 import { equals } from 'ramda';
-import { Fragment } from 'react';
-import {
-  AiOutlineClear,
-  AiOutlineFieldString,
-  AiOutlineFunction,
-} from 'react-icons/ai';
+import { AiOutlineFieldString, AiOutlineFunction } from 'react-icons/ai';
 
 type Props = {
   field: Field;
@@ -47,7 +41,7 @@ export const FieldBadge = ({ field }: Props) => {
   return (
     <HStack>
       <Badge
-        minW={field?.valueLiteral ? undefined : '40px'}
+        minW={field?.value ? undefined : '40px'}
         bg={`#${color}`}
         {...(equals(hoveringId, field.id) ? { 'data-focus': true } : {})}
         focusRing="outside"
@@ -59,44 +53,19 @@ export const FieldBadge = ({ field }: Props) => {
           setHoveringId(null);
         }}
       >
-        {field?.valueLiteral && <AiOutlineFieldString />}
-        {field?.valueLiteral}
+        {field?.value?.type === ValueType.STRING && (
+          <>
+            <AiOutlineFieldString />
+            {field.value.value}
+          </>
+        )}
+        {field?.value?.type === ValueType.EXPRESSION && (
+          <>
+            <AiOutlineFunction />
+            {JSON.stringify(field.value.expression)}
+          </>
+        )}
       </Badge>
-      {field.status.map((status, idx) => {
-        if ('isUnseted' in status && status.isUnseted) {
-          return (
-            <Tooltip
-              content={`This field is unseted, step: ${status.step + 1}`}
-              openDelay={0}
-              closeDelay={0}
-              // biome-ignore lint/suspicious/noArrayIndexKey: doesn't matter
-              key={idx}
-            >
-              <IconButton size="2xs" variant="ghost" colorPalette="red">
-                <AiOutlineClear />
-              </IconButton>
-            </Tooltip>
-          );
-        }
-
-        if ('isExpression' in status && status.isExpression) {
-          return (
-            <Tooltip
-              content={JSON.stringify(status.expression)}
-              openDelay={0}
-              closeDelay={0}
-              // biome-ignore lint/suspicious/noArrayIndexKey: doesn't matter
-              key={idx}
-            >
-              <IconButton size="2xs" variant="ghost" colorPalette="red">
-                <AiOutlineFunction />
-              </IconButton>
-            </Tooltip>
-          );
-        }
-        // biome-ignore lint/suspicious/noArrayIndexKey: doesn't matter
-        return <Fragment key={idx} />;
-      })}
     </HStack>
   );
 };

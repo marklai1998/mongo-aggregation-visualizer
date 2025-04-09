@@ -1,5 +1,5 @@
 import { Document } from '@/components/Document.tsx';
-import type { State } from '@/utils/analyze';
+import type { State } from '@/utils/newAnalyze';
 import { Box } from '@chakra-ui/react';
 
 type Props = {

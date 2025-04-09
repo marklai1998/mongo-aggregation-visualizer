@@ -1,5 +1,5 @@
 import { Document } from '@/components/Document.tsx';
-import type { State } from '@/utils/analyze';
+import type { State } from '@/utils/newAnalyze';
 
 type Props = {
   state: State;
@@ -8,7 +8,10 @@ type Props = {
 export const Result = ({ state }: Props) => {
   return (
     <div>
-      <Document document={state.result} />
+      {state.results.map((document, idx) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: does not matter
+        <Document document={document} key={idx} />
+      ))}
     </div>
   );
 };

@@ -1,8 +1,8 @@
 import type { Aggregation, Stage } from '@/types/aggregation.ts';
-import { analyzeAddField } from '@/utils/analyze/stageAnalyzer/addField.ts';
-import { analyzeProject } from '@/utils/analyze/stageAnalyzer/project.ts';
-import { analyzeSet } from '@/utils/analyze/stageAnalyzer/set.ts';
-import { analyzeUnset } from '@/utils/analyze/stageAnalyzer/unset.ts';
+import { analyzeAddField } from '@/utils/oldAnalyze/stageAnalyzer/addField.ts';
+import { analyzeProject } from '@/utils/oldAnalyze/stageAnalyzer/project.ts';
+import { analyzeSet } from '@/utils/oldAnalyze/stageAnalyzer/set.ts';
+import { analyzeUnset } from '@/utils/oldAnalyze/stageAnalyzer/unset.ts';
 import { last } from 'ramda';
 
 export const DEFAULT_COLLECTION = 'Source';

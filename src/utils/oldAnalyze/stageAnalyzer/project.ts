@@ -1,12 +1,6 @@
 import type { Project } from '@/types/aggregation.ts';
-import {
-  FIELD_SYMBOL,
-  FieldType,
-  type StageAnalyzer,
-  type State,
-} from '@/utils/analyze';
-import { isExpression, isTmpField } from '@/utils/analyze/analyzeUtil.ts';
-import { analyzeUnset } from '@/utils/analyze/stageAnalyzer/unset.ts';
+import { isExpression, isTmpField } from '@/utils/oldAnalyze/analyzeUtil.ts';
+import { analyzeUnset } from '@/utils/oldAnalyze/stageAnalyzer/unset.ts';
 import { flatten } from 'flat';
 import {
   assocPath,
@@ -16,6 +10,7 @@ import {
   path as pathFn,
   pick,
 } from 'ramda';
+import { FIELD_SYMBOL, FieldType, type StageAnalyzer, type State } from '..';
 
 type ExtendedState = State & { newResult: State['result'] };
 

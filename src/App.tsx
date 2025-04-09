@@ -3,10 +3,10 @@ import { ColorModeButton } from '@/components/ui/color-mode.tsx';
 import { Collections } from '@/containers/Collections.tsx';
 import { Result } from '@/containers/Result.tsx';
 import type { Aggregation } from '@/types/aggregation.ts';
-import { analyze } from '@/utils/analyze';
 import { Box, HStack, Heading, VStack } from '@chakra-ui/react';
 import { last } from 'ramda';
 import { useMemo, useState } from 'react';
+import { analyze } from './utils/newAnalyze';
 
 export const App = () => {
   const [value, setValue] = useState<Aggregation>([]);
