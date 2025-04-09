@@ -1,5 +1,6 @@
 import type { Aggregation, Stage } from '@/types/aggregation.ts';
 import { setStage } from '@/utils/newAnalyze/stages/set.ts';
+import { unsetStage } from '@/utils/newAnalyze/stages/unset.ts';
 import { clone, last } from 'ramda';
 
 export const DEFAULT_COLLECTION = 'Source';
@@ -87,6 +88,10 @@ export const analyze = (aggregation: Aggregation) =>
 
       if ('$set' in stage) {
         states.push(setStage({ ...arg, stage }));
+      }
+
+      if ('$unset' in stage) {
+        states.push(unsetStage({ ...arg, stage }));
       }
 
       return states;
