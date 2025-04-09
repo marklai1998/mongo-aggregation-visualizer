@@ -284,4 +284,81 @@ describe('set', () => {
       ],
     });
   });
+
+  it('resolve reference', () => {
+    const result = setStage({
+      state: {
+        collections: {
+          [DEFAULT_COLLECTION]: {
+            fields: {
+              _id: {
+                _type: FIELD_SYMBOL,
+                id: {
+                  collection: DEFAULT_COLLECTION,
+                  path: '_id',
+                },
+              },
+            },
+          },
+        },
+        results: [
+          {
+            _id: {
+              _type: FIELD_SYMBOL,
+              id: {
+                collection: DEFAULT_COLLECTION,
+                path: '_id',
+              },
+            },
+          },
+        ],
+      },
+      stage: {
+        $set: {
+          a: '$b',
+        },
+      },
+    });
+
+    expect(result).toStrictEqual({
+      collections: {
+        [DEFAULT_COLLECTION]: {
+          fields: {
+            _id: {
+              _type: FIELD_SYMBOL,
+              id: {
+                collection: DEFAULT_COLLECTION,
+                path: '_id',
+              },
+            },
+            b: {
+              _type: FIELD_SYMBOL,
+              id: {
+                collection: DEFAULT_COLLECTION,
+                path: 'b',
+              },
+            },
+          },
+        },
+      },
+      results: [
+        {
+          _id: {
+            _type: FIELD_SYMBOL,
+            id: {
+              collection: DEFAULT_COLLECTION,
+              path: '_id',
+            },
+          },
+          a: {
+            _type: FIELD_SYMBOL,
+            id: {
+              collection: DEFAULT_COLLECTION,
+              path: 'b',
+            },
+          },
+        },
+      ],
+    });
+  });
 });

@@ -6,14 +6,34 @@ import {
   type State,
   ValueType,
 } from '@/utils/newAnalyze/index.ts';
-import { assocPath, path as pathFn } from 'ramda';
+import { assocPath, path as pathFn, tail } from 'ramda';
 
 export const resolveField = ({
   prevState,
   path,
   state,
   value,
-}: { state: State; prevState: State; path: string; value?: unknown }) => {
+  srcOnly = false,
+}: {
+  state: State;
+  prevState: State;
+  path: string;
+  value?: unknown;
+  srcOnly?: boolean;
+}): Field => {
+  const isReference = typeof value === 'string' && value.startsWith('$');
+
+  if (isReference) {
+    const newField = resolveField({
+      prevState,
+      path: tail(value),
+      state,
+      srcOnly: true,
+    });
+    state.results = state.results.map(assocPath(path.split('.'), newField));
+    return newField;
+  }
+
   const newValue: Field['value'] = value
     ? isExpression(value)
       ? {
@@ -33,11 +53,11 @@ export const resolveField = ({
     state.results = state.results.map(
       assocPath(path.split('.'), {
         ...prevResultItem,
-        value: newValue,
+        ...(newValue ? { value: newValue } : {}),
       }),
     );
 
-    return;
+    return prevResultItem;
   }
 
   const prevCollectionItem = pathFn(
@@ -47,10 +67,12 @@ export const resolveField = ({
 
   if (isFieldResult(prevCollectionItem)) {
     // If its already in collection, use it
-    state.results = state.results.map(
-      assocPath(path.split('.'), prevCollectionItem),
-    );
-    return;
+    if (!srcOnly) {
+      state.results = state.results.map(
+        assocPath(path.split('.'), prevCollectionItem),
+      );
+    }
+    return prevCollectionItem;
   }
 
   // Set it in both src collection and result
@@ -61,7 +83,7 @@ export const resolveField = ({
       collection: DEFAULT_COLLECTION,
       path,
     },
-    value: newValue,
+    ...(newValue ? { value: newValue } : {}),
   };
 
   state.collections[DEFAULT_COLLECTION].fields = assocPath(
@@ -69,5 +91,9 @@ export const resolveField = ({
     newField,
     state.collections[DEFAULT_COLLECTION].fields,
   );
-  state.results = state.results.map(assocPath(path.split('.'), newField));
+  if (!srcOnly) {
+    state.results = state.results.map(assocPath(path.split('.'), newField));
+  }
+
+  return newField;
 };
