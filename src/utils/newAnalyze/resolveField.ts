@@ -4,7 +4,6 @@ import {
   FIELD_SYMBOL,
   type Field,
   type State,
-  TMP_COLLECTION,
   ValueType,
 } from '@/utils/newAnalyze/index.ts';
 import { assocPath, path as pathFn } from 'ramda';
@@ -14,27 +13,30 @@ export const resolveField = ({
   path,
   state,
   value,
-}: { state: State; prevState: State; path: string; value: unknown }) => {
-  const expression = isExpression(value);
+}: { state: State; prevState: State; path: string; value?: unknown }) => {
+  const newValue: Field['value'] = value
+    ? isExpression(value)
+      ? {
+          type: ValueType.EXPRESSION,
+          expression: value,
+        }
+      : {
+          type: ValueType.STRING,
+          value: String(value),
+        }
+    : undefined;
 
   const prevResultItemDoc = prevState.results.find(pathFn(path.split('.')));
   const prevResultItem = pathFn(path.split('.'), prevResultItemDoc);
 
   if (isFieldResult(prevResultItem)) {
-    if (expression) {
-      // If its expression ignore it treat it as new field
-      state.results = state.results.map(
-        assocPath(path.split('.'), {
-          ...prevResultItem,
-          value: {
-            type: ValueType.EXPRESSION,
-            expression: value,
-          },
-        }),
-      );
-      return;
-    }
-    // If field is in prev document, do nothing
+    state.results = state.results.map(
+      assocPath(path.split('.'), {
+        ...prevResultItem,
+        value: newValue,
+      }),
+    );
+
     return;
   }
 
@@ -59,15 +61,7 @@ export const resolveField = ({
       collection: DEFAULT_COLLECTION,
       path,
     },
-    value: expression
-      ? {
-          type: ValueType.EXPRESSION,
-          expression: value,
-        }
-      : {
-          type: ValueType.STRING,
-          value: String(value),
-        },
+    value: newValue,
   };
 
   state.collections[DEFAULT_COLLECTION].fields = assocPath(
