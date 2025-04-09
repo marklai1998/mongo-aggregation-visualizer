@@ -1,6 +1,6 @@
 import type { AddFields } from '@/types/aggregation.ts';
-import type { StageAnalyzer } from '@/utils/newAnalyze';
-import { setStage } from '@/utils/newAnalyze/stages/set.ts';
+import { setStage } from '@/utils/analyze/stages/set.ts';
+import type { StageAnalyzer } from '..';
 
 export const addFieldsStage: StageAnalyzer<AddFields> = ({
   state,

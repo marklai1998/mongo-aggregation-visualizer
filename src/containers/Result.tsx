@@ -1,5 +1,5 @@
 import { Document } from '@/components/Document.tsx';
-import type { State } from '@/utils/newAnalyze';
+import type { State } from '../utils/analyze';
 
 type Props = {
   state: State;

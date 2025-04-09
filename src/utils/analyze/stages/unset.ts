@@ -1,7 +1,7 @@
 import type { Unset } from '@/types/aggregation.ts';
-import type { StageAnalyzer } from '@/utils/newAnalyze';
-import { resolveField } from '@/utils/newAnalyze/resolveField.ts';
+import { resolveField } from '@/utils/analyze/resolveField.ts';
 import { clone, dissocPath } from 'ramda';
+import type { StageAnalyzer } from '..';
 
 export const unsetStage: StageAnalyzer<Unset> = ({
   state: prevState,

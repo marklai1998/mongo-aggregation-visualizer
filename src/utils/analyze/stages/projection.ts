@@ -1,8 +1,8 @@
 import type { Project } from '@/types/aggregation.ts';
-import type { StageAnalyzer } from '@/utils/newAnalyze';
+import type { StageAnalyzer } from '..';
 
-import { resolveField } from '@/utils/newAnalyze/resolveField.ts';
-import { unsetStage } from '@/utils/newAnalyze/stages/unset.ts';
+import { resolveField } from '@/utils/analyze/resolveField.ts';
+import { unsetStage } from '@/utils/analyze/stages/unset.ts';
 import { recursive } from '@/utils/recursive.ts';
 import { flatten } from 'flat';
 import { assocPath, clone, dissocPath, omit } from 'ramda';

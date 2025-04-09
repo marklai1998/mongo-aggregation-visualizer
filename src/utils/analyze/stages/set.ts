@@ -1,12 +1,9 @@
 import type { Set as SetStage } from '@/types/aggregation.ts';
-import { type Field, type StageAnalyzer, ValueType } from '@/utils/newAnalyze';
-import {
-  isExpression,
-  isReferencePath,
-} from '@/utils/newAnalyze/analyzeUtil.ts';
-import { resolveField } from '@/utils/newAnalyze/resolveField.ts';
+import { isExpression, isReferencePath } from '@/utils/analyze/analyzeUtil.ts';
+import { resolveField } from '@/utils/analyze/resolveField.ts';
 import { recursive } from '@/utils/recursive.ts';
 import { assocPath, clone } from 'ramda';
+import { type Field, type StageAnalyzer, ValueType } from '..';
 
 export const setStage: StageAnalyzer<SetStage> = ({
   state: prevState,

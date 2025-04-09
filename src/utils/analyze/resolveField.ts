@@ -1,11 +1,11 @@
-import { isExpression, isFieldResult } from '@/utils/newAnalyze/analyzeUtil.ts';
+import { isExpression, isFieldResult } from '@/utils/analyze/analyzeUtil.ts';
 import {
   DEFAULT_COLLECTION,
   FIELD_SYMBOL,
   type Field,
   type State,
   ValueType,
-} from '@/utils/newAnalyze/index.ts';
+} from '@/utils/analyze/index.ts';
 import { assocPath, path as pathFn, tail } from 'ramda';
 
 export const resolveField = ({

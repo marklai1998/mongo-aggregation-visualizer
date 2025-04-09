@@ -1,9 +1,9 @@
 import { useHoveringField } from '@/hooks/useHoveringField.ts';
 import { getColor } from '@/utils/getColor.ts';
-import { type Field, ValueType } from '@/utils/newAnalyze';
 import { Badge, HStack } from '@chakra-ui/react';
 import { equals } from 'ramda';
 import { AiOutlineFieldString, AiOutlineFunction } from 'react-icons/ai';
+import { type Field, ValueType } from '../utils/analyze';
 
 type Props = {
   field: Field;

@@ -1,10 +1,10 @@
+import { unsetStage } from '@/utils/analyze/stages/unset.ts';
 import {
   DEFAULT_COLLECTION,
   FIELD_SYMBOL,
   ValueType,
   getBaseState,
-} from '@/utils/newAnalyze';
-import { unsetStage } from '@/utils/newAnalyze/stages/unset.ts';
+} from '../.';
 
 describe('unset', () => {
   it('unset field', () => {

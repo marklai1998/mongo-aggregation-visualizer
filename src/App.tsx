@@ -6,7 +6,7 @@ import type { Aggregation } from '@/types/aggregation.ts';
 import { Box, HStack, Heading, VStack } from '@chakra-ui/react';
 import { last } from 'ramda';
 import { useMemo, useState } from 'react';
-import { analyze } from './utils/newAnalyze';
+import { analyze } from './utils/analyze';
 
 export const App = () => {
   const [value, setValue] = useState<Aggregation>([]);

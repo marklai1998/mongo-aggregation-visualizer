@@ -1,4 +1,4 @@
-import { isExpression } from '@/utils/oldAnalyze/analyzeUtil.ts';
+import { isExpression } from '@/utils/analyze/analyzeUtil.ts';
 
 export const recursive = <T extends object>(
   {

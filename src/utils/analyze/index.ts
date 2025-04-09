@@ -1,8 +1,8 @@
 import type { Aggregation, Stage } from '@/types/aggregation.ts';
-import { addFieldsStage } from '@/utils/newAnalyze/stages/addFields.ts';
-import { projectionStage } from '@/utils/newAnalyze/stages/projection.ts';
-import { setStage } from '@/utils/newAnalyze/stages/set.ts';
-import { unsetStage } from '@/utils/newAnalyze/stages/unset.ts';
+import { addFieldsStage } from '@/utils/analyze/stages/addFields.ts';
+import { projectionStage } from '@/utils/analyze/stages/projection.ts';
+import { setStage } from '@/utils/analyze/stages/set.ts';
+import { unsetStage } from '@/utils/analyze/stages/unset.ts';
 import { clone, last } from 'ramda';
 
 export const DEFAULT_COLLECTION = 'Source';

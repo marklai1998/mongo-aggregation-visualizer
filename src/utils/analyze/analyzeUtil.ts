@@ -1,4 +1,4 @@
-import { FIELD_SYMBOL, type Field } from '@/utils/newAnalyze/index.ts';
+import { FIELD_SYMBOL, type Field } from '@/utils/analyze/index.ts';
 
 export const isFieldResult = (v: unknown): v is Field =>
   typeof v === 'object' &&
