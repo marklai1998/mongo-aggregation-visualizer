@@ -1,6 +1,6 @@
 import { setStage } from '@/utils/analyze/stages/set.ts';
-import { DEFAULT_COLLECTION, FIELD_SYMBOL, getBaseState } from '../.';
-import { ValueType } from '../.';
+import { DEFAULT_COLLECTION, FIELD_SYMBOL, getBaseState } from '../..';
+import { ValueType } from '../..';
 
 describe('set', () => {
   it('set field', () => {

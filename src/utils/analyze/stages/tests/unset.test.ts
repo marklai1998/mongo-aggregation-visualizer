@@ -4,7 +4,7 @@ import {
   FIELD_SYMBOL,
   ValueType,
   getBaseState,
-} from '../.';
+} from '../..';
 
 describe('unset', () => {
   it('unset field', () => {
