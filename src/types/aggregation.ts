@@ -37,7 +37,7 @@ export const project = Type.Object({
   ),
 });
 
-export const stage = Type.Union([addField, unset, set, project]);
+export const stage = Type.Union([addFields, unset, set, project]);
 
 export const aggregation = Type.Array(stage);
 
