@@ -45,9 +45,35 @@ export type State = {
 
 export type StageAnalyzer<S extends Stage> = (arg: {
   state: State;
-  collection: string;
   stage: S;
 }) => State;
+
+export const getBaseState = (): State => ({
+  collections: {
+    [DEFAULT_COLLECTION]: {
+      fields: {
+        _id: {
+          _type: FIELD_SYMBOL,
+          id: {
+            collection: DEFAULT_COLLECTION,
+            path: '_id',
+          },
+        },
+      },
+    },
+  },
+  results: [
+    {
+      _id: {
+        _type: FIELD_SYMBOL,
+        id: {
+          collection: DEFAULT_COLLECTION,
+          path: '_id',
+        },
+      },
+    },
+  ],
+});
 
 export const analyze = (aggregation: Aggregation) =>
   aggregation.reduce<[State]>(
@@ -65,32 +91,5 @@ export const analyze = (aggregation: Aggregation) =>
 
       return states;
     },
-    [
-      {
-        collections: {
-          [DEFAULT_COLLECTION]: {
-            fields: {
-              _id: {
-                _type: FIELD_SYMBOL,
-                id: {
-                  collection: DEFAULT_COLLECTION,
-                  path: '_id',
-                },
-              },
-            },
-          },
-        },
-        results: [
-          {
-            _id: {
-              _type: FIELD_SYMBOL,
-              id: {
-                collection: DEFAULT_COLLECTION,
-                path: '_id',
-              },
-            },
-          },
-        ],
-      },
-    ],
+    [getBaseState()],
   );

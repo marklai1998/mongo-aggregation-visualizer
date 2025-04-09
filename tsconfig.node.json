@@ -3,6 +3,7 @@
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
     "target": "ESNext",
     "lib": ["ESNext"],
+    "types": ["vitest/globals", "node"],
     "module": "ESNext",
     "skipLibCheck": true,
 

@@ -56,7 +56,7 @@ export const resolveField = ({
   const newField: Field = {
     _type: FIELD_SYMBOL,
     id: {
-      collection: TMP_COLLECTION,
+      collection: DEFAULT_COLLECTION,
       path,
     },
     value: expression
