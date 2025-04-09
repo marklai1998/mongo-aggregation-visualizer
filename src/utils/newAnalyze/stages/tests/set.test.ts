@@ -28,17 +28,6 @@ describe('set', () => {
                 path: '_id',
               },
             },
-            a: {
-              _type: FIELD_SYMBOL,
-              id: {
-                collection: DEFAULT_COLLECTION,
-                path: 'a',
-              },
-              value: {
-                type: ValueType.STRING,
-                value: '1',
-              },
-            },
           },
         },
       },
@@ -89,30 +78,6 @@ describe('set', () => {
               id: {
                 collection: 'Source',
                 path: '_id',
-              },
-            },
-            a: {
-              b: {
-                _type: FIELD_SYMBOL,
-                id: {
-                  collection: DEFAULT_COLLECTION,
-                  path: 'a.b',
-                },
-                value: {
-                  type: ValueType.STRING,
-                  value: '1',
-                },
-              },
-              c: {
-                _type: FIELD_SYMBOL,
-                id: {
-                  collection: DEFAULT_COLLECTION,
-                  path: 'a.c',
-                },
-                value: {
-                  type: ValueType.STRING,
-                  value: '2',
-                },
               },
             },
           },

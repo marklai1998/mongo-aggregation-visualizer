@@ -86,11 +86,13 @@ export const resolveField = ({
     ...(newValue ? { value: newValue } : {}),
   };
 
-  state.collections[DEFAULT_COLLECTION].fields = assocPath(
-    path.split('.'),
-    newField,
-    state.collections[DEFAULT_COLLECTION].fields,
-  );
+  if (srcOnly) {
+    state.collections[DEFAULT_COLLECTION].fields = assocPath(
+      path.split('.'),
+      newField,
+      state.collections[DEFAULT_COLLECTION].fields,
+    );
+  }
   if (!srcOnly) {
     state.results = state.results.map(assocPath(path.split('.'), newField));
   }
