@@ -1,5 +1,6 @@
 import type { Aggregation, Stage } from '@/types/aggregation.ts';
 import { addFieldsStage } from '@/utils/newAnalyze/stages/addFields.ts';
+import { projectionStage } from '@/utils/newAnalyze/stages/projection.ts';
 import { setStage } from '@/utils/newAnalyze/stages/set.ts';
 import { unsetStage } from '@/utils/newAnalyze/stages/unset.ts';
 import { clone, last } from 'ramda';
@@ -97,6 +98,10 @@ export const analyze = (aggregation: Aggregation) =>
 
       if ('$addFields' in stage) {
         states.push(addFieldsStage({ ...arg, stage }));
+      }
+
+      if ('$project' in stage) {
+        states.push(projectionStage({ ...arg, stage }));
       }
 
       return states;

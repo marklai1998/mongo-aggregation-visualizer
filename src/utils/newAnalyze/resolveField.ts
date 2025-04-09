@@ -20,7 +20,7 @@ export const resolveField = ({
   path: string;
   value?: unknown;
   setSrc: boolean;
-}): Field => {
+}): Field | Document => {
   const isReference = typeof value === 'string' && value.startsWith('$');
 
   if (isReference) {
@@ -45,9 +45,12 @@ export const resolveField = ({
     : undefined;
 
   const prevResultItemDoc = prevState.results.find(pathFn(path.split('.')));
-  const prevResultItem = pathFn(path.split('.'), prevResultItemDoc);
+  const prevResultItem = pathFn<Document | Field>(
+    path.split('.'),
+    prevResultItemDoc,
+  );
 
-  if (isFieldResult(prevResultItem)) {
+  if (prevResultItem) {
     return prevResultItem;
   }
 

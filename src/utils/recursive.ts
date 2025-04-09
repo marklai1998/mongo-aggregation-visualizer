@@ -14,7 +14,7 @@ export const recursive = <T extends object>(
 
     if (typeof value === 'object' && !isExpression(value)) {
       recursive({ object: value, callback }, path);
-      return;
+      continue;
     }
 
     callback({ value, path });
