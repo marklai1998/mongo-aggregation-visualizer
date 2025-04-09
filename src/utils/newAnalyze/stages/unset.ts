@@ -6,11 +6,14 @@ import { clone, dissocPath } from 'ramda';
 export const unsetStage: StageAnalyzer<Unset> = ({
   state: prevState,
   stage: { $unset: stage },
-}) =>
-  (typeof stage === 'string' ? [stage] : stage).reduce((state, path) => {
-    resolveField({ prevState, state, path, setResult: false, setSrc: true });
+}) => {
+  const state = clone(prevState);
+
+  for (const path of typeof stage === 'string' ? [stage] : stage) {
+    resolveField({ prevState, state, path, setSrc: true });
 
     state.results = state.results.map(dissocPath(path.split('.')));
+  }
 
-    return state;
-  }, clone(prevState));
+  return state;
+};

@@ -8,3 +8,6 @@ export const isFieldResult = (v: unknown): v is Field =>
 
 export const isExpression = (v: unknown) =>
   v && typeof v === 'object' && Object.keys(v).some((v) => v.startsWith('$'));
+
+export const isReferencePath = (v: unknown) =>
+  typeof v === 'string' && v.startsWith('$');

@@ -1,8 +1,12 @@
 import type { Set as SetStage } from '@/types/aggregation.ts';
-import type { StageAnalyzer } from '@/utils/newAnalyze';
+import { type Field, type StageAnalyzer, ValueType } from '@/utils/newAnalyze';
+import {
+  isExpression,
+  isReferencePath,
+} from '@/utils/newAnalyze/analyzeUtil.ts';
 import { resolveField } from '@/utils/newAnalyze/resolveField.ts';
 import { recursive } from '@/utils/recursive.ts';
-import { clone } from 'ramda';
+import { assocPath, clone } from 'ramda';
 
 export const setStage: StageAnalyzer<SetStage> = ({
   state: prevState,
@@ -13,14 +17,33 @@ export const setStage: StageAnalyzer<SetStage> = ({
   recursive({
     object: stage,
     callback: ({ value, path }) => {
-      resolveField({
+      const resolvedField = resolveField({
         prevState,
         path,
         state,
         value,
         setSrc: false,
-        setResult: true,
       });
+
+      const newValue: Field['value'] =
+        value && !isReferencePath(value)
+          ? isExpression(value)
+            ? {
+                type: ValueType.EXPRESSION,
+                expression: value,
+              }
+            : {
+                type: ValueType.STRING,
+                value: String(value),
+              }
+          : undefined;
+
+      state.results = state.results.map(
+        assocPath(path.split('.'), {
+          ...resolvedField,
+          ...(newValue ? { value: newValue } : {}),
+        }),
+      );
     },
   });
 
