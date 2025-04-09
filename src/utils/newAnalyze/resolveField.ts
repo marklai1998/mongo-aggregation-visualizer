@@ -53,12 +53,14 @@ export const resolveField = ({
   const prevResultItem = pathFn(path.split('.'), prevResultItemDoc);
 
   if (isFieldResult(prevResultItem)) {
-    state.results = state.results.map(
-      assocPath(path.split('.'), {
-        ...prevResultItem,
-        ...(newValue ? { value: newValue } : {}),
-      }),
-    );
+    if (setResult) {
+      state.results = state.results.map(
+        assocPath(path.split('.'), {
+          ...prevResultItem,
+          ...(newValue ? { value: newValue } : {}),
+        }),
+      );
+    }
 
     return prevResultItem;
   }
