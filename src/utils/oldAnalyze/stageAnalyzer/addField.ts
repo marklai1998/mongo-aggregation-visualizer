@@ -1,4 +1,4 @@
-import type { AddField } from '@/types/aggregation.ts';
+import type { AddFields } from '@/types/aggregation.ts';
 import { isExpression } from '@/utils/oldAnalyze/analyzeUtil.ts';
 import { assocPath, clone } from 'ramda';
 import {
@@ -12,7 +12,7 @@ import {
 export const addFieldRecursive = (
   state: State,
   baseCollection: string,
-  stage: AddField['$addFields'],
+  stage: AddFields['$addFields'],
   baseKey?: string,
 ): State =>
   Object.entries(stage).reduce((state, [key, content]) => {
@@ -55,7 +55,7 @@ export const addFieldRecursive = (
     return state;
   }, clone(state));
 
-export const analyzeAddField: StageAnalyzer<AddField> = ({
+export const analyzeAddField: StageAnalyzer<AddFields> = ({
   state,
   collection,
   stage: { $addFields: stage },

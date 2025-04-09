@@ -7,7 +7,7 @@ export const unset = Type.Object({
   ]),
 });
 
-export const addField = Type.Object({
+export const addFields = Type.Object({
   $addFields: Type.Recursive((This) =>
     Type.Mapped(Type.String({ minLength: 1 }), () =>
       Type.Union([Type.String(), This]),
@@ -43,7 +43,7 @@ export const aggregation = Type.Array(stage);
 
 export type Aggregation = Static<typeof aggregation>;
 export type Stage = Static<typeof stage>;
-export type AddField = Static<typeof addField>;
+export type AddFields = Static<typeof addFields>;
 export type Unset = Static<typeof unset>;
 export type Set = Static<typeof set>;
 export type Project = Static<typeof project>;
