@@ -17,6 +17,7 @@ export type FieldId = {
 export enum ValueType {
   STRING = 'STRING',
   EXPRESSION = 'EXPRESSION',
+  OBJECT_ID = 'OBJECT_ID',
 }
 
 export type Field = {
@@ -30,7 +31,8 @@ export type Field = {
     | {
         type: ValueType.EXPRESSION;
         expression: unknown;
-      };
+      }
+    | { type: ValueType.OBJECT_ID };
 };
 
 export type Document = {
@@ -61,6 +63,9 @@ export const getBaseState = (): State => ({
             collection: DEFAULT_COLLECTION,
             path: '_id',
           },
+          value: {
+            type: ValueType.OBJECT_ID,
+          },
         },
       },
     },
@@ -72,6 +77,9 @@ export const getBaseState = (): State => ({
         id: {
           collection: DEFAULT_COLLECTION,
           path: '_id',
+        },
+        value: {
+          type: ValueType.OBJECT_ID,
         },
       },
     },

@@ -1,9 +1,9 @@
 import { useHoveringField } from '@/hooks/useHoveringField.ts';
+import { type Field, ValueType } from '@/utils/analyze';
 import { getColor } from '@/utils/getColor.ts';
 import { Badge, HStack } from '@chakra-ui/react';
 import { equals } from 'ramda';
 import { AiOutlineFieldString, AiOutlineFunction } from 'react-icons/ai';
-import { type Field, ValueType } from '../utils/analyze';
 
 type Props = {
   field: Field;
@@ -41,7 +41,11 @@ export const FieldBadge = ({ field }: Props) => {
   return (
     <HStack>
       <Badge
-        minW={field?.value ? undefined : '40px'}
+        minW={
+          field?.value || field?.value?.type === 'OBJECT_ID'
+            ? undefined
+            : '100px'
+        }
         bg={`#${color}`}
         {...(equals(hoveringId, field.id) ? { 'data-focus': true } : {})}
         focusRing="outside"
@@ -53,6 +57,7 @@ export const FieldBadge = ({ field }: Props) => {
           setHoveringId(null);
         }}
       >
+        {field?.value?.type === 'OBJECT_ID' && 'ObjectId'}
         {field?.value?.type === ValueType.STRING && (
           <>
             <AiOutlineFieldString />
