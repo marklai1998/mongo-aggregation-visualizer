@@ -37,7 +37,7 @@ export const projectionStage: StageAnalyzer<Project> = ({
         }
         return;
       }
-      console.log(path);
+
       const resolvedField = resolveField({
         prevState,
         path,
