@@ -13,13 +13,15 @@ export const resolveField = ({
   path,
   state,
   value,
-  srcOnly = false,
+  setResult = true,
+  setSrc = true,
 }: {
   state: State;
   prevState: State;
   path: string;
   value?: unknown;
-  srcOnly?: boolean;
+  setResult?: boolean;
+  setSrc: boolean;
 }): Field => {
   const isReference = typeof value === 'string' && value.startsWith('$');
 
@@ -28,7 +30,8 @@ export const resolveField = ({
       prevState,
       path: tail(value),
       state,
-      srcOnly: true,
+      setResult: false,
+      setSrc: true,
     });
     state.results = state.results.map(assocPath(path.split('.'), newField));
     return newField;
@@ -67,7 +70,7 @@ export const resolveField = ({
 
   if (isFieldResult(prevCollectionItem)) {
     // If its already in collection, use it
-    if (!srcOnly) {
+    if (setResult) {
       state.results = state.results.map(
         assocPath(path.split('.'), prevCollectionItem),
       );
@@ -86,14 +89,14 @@ export const resolveField = ({
     ...(newValue ? { value: newValue } : {}),
   };
 
-  if (srcOnly) {
+  if (setSrc) {
     state.collections[DEFAULT_COLLECTION].fields = assocPath(
       path.split('.'),
       newField,
       state.collections[DEFAULT_COLLECTION].fields,
     );
   }
-  if (!srcOnly) {
+  if (setResult) {
     state.results = state.results.map(assocPath(path.split('.'), newField));
   }
 

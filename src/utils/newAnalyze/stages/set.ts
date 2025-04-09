@@ -13,7 +13,14 @@ export const setStage: StageAnalyzer<SetStage> = ({
   recursive({
     object: stage,
     callback: ({ value, path }) => {
-      resolveField({ prevState, path, state, value });
+      resolveField({
+        prevState,
+        path,
+        state,
+        value,
+        setSrc: false,
+        setResult: true,
+      });
     },
   });
 
