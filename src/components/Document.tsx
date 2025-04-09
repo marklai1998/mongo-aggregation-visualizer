@@ -1,5 +1,5 @@
 import { FieldBadge } from '@/components/FieldBadge.tsx';
-import { isFieldResult } from '@/utils/analyze/analyzeUtil.ts';
+import { isField } from '@/utils/analyze/analyzeUtil.ts';
 import { Card, DataList } from '@chakra-ui/react';
 import type { Document as MongoDocument } from '../utils/analyze';
 
@@ -16,7 +16,7 @@ export const Document = ({ document }: Props) => (
           .map(([label, item]) => (
             <DataList.Item key={label} alignItems="start">
               <DataList.ItemLabel lineHeight="tall">{label}</DataList.ItemLabel>
-              {isFieldResult(item) ? (
+              {isField(item) ? (
                 <DataList.ItemValue>
                   <FieldBadge field={item} />
                 </DataList.ItemValue>

@@ -1,4 +1,4 @@
-import { isExpression, isFieldResult } from '@/utils/analyze/analyzeUtil.ts';
+import { isExpression, isField } from '@/utils/analyze/analyzeUtil.ts';
 import {
   DEFAULT_COLLECTION,
   FIELD_SYMBOL,
@@ -59,7 +59,7 @@ export const resolveField = ({
     state.collections[DEFAULT_COLLECTION].fields,
   );
 
-  if (isFieldResult(prevCollectionItem)) {
+  if (isField(prevCollectionItem)) {
     // If its already in collection, use it
     return prevCollectionItem;
   }
