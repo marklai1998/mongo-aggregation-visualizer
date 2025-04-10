@@ -50,7 +50,7 @@ export type State = {
 
 export type StageAnalyzer<S extends Stage> = (arg: {
   state: State;
-  states: State[];
+  states?: State[];
   stage: S;
 }) => State;
 

@@ -79,9 +79,9 @@ export const resolveField = ({
 
   if (setSrc) {
     for (const state of prevStates) {
-      for (let result of state.results) {
-        result = assocPath(path.split('.'), newField, result);
-      }
+      state.results = state.results.map((result) =>
+        assocPath(path.split('.'), newField, result),
+      );
     }
 
     state.collections[DEFAULT_COLLECTION].fields = assocPath(

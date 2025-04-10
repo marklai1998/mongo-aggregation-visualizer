@@ -5,7 +5,7 @@ import type { StageAnalyzer } from '..';
 
 export const unsetStage: StageAnalyzer<Unset> = ({
   state: prevState,
-  states,
+  states = [],
   stage: { $unset: stage },
 }) => {
   const state = clone(prevState);

@@ -13,7 +13,7 @@ import {
 
 export const setStage: StageAnalyzer<SetStage> = ({
   state: prevState,
-  states,
+  states = [],
   stage: { $set: stage },
 }) => {
   const state = clone(prevState);

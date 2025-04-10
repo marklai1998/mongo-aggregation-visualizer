@@ -5,11 +5,19 @@ import { resolveField } from '@/utils/analyze/resolveField.ts';
 import { unsetStage } from '@/utils/analyze/stages/unset.ts';
 import { recursive } from '@/utils/recursive.ts';
 import { flatten } from 'flat';
-import { assocPath, clone, dissocPath, omit } from 'ramda';
+import {
+  assocPath,
+  clone,
+  dissocPath,
+  omit,
+  path as pathFn,
+  range,
+  slice,
+} from 'ramda';
 
 export const projectionStage: StageAnalyzer<Project> = ({
   state: prevState,
-  states,
+  states = [],
   stage: { $project: stage },
 }) => {
   const state = clone(prevState);
@@ -47,9 +55,22 @@ export const projectionStage: StageAnalyzer<Project> = ({
         setSrc: true,
       });
 
-      state.results = state.results.map(
-        assocPath(path.split('.'), resolvedField),
-      );
+      state.results = state.results.map((result) => {
+        let clonedResult = clone(result);
+
+        const splittedPath = path.split('.');
+        const paths = range(0, splittedPath.length)
+          .map((i) => slice(0, i + 1, splittedPath))
+          .reverse();
+
+        for (const p of paths) {
+          if (pathFn(p, result)) {
+            clonedResult = dissocPath(p, result);
+          }
+        }
+
+        return assocPath(path.split('.'), resolvedField, clonedResult);
+      });
     },
   });
 

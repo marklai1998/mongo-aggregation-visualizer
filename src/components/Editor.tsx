@@ -27,7 +27,10 @@ const defaultValue = `// Source.aggregate(
   {
     $project:{
       a:1,
-      b:1,c:1
+      b:1,
+      c:{
+        e:1
+      }
     }
   }
 ]
