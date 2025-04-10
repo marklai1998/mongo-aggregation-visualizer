@@ -42,7 +42,7 @@ export const FieldBadge = ({ field }: Props) => {
     <HStack>
       <Badge
         minW={
-          field?.value || field?.value?.type === 'OBJECT_ID'
+          field?.value || field?.value?.type === ValueType.OBJECT_ID
             ? undefined
             : '100px'
         }
@@ -57,7 +57,7 @@ export const FieldBadge = ({ field }: Props) => {
           setHoveringId(null);
         }}
       >
-        {field?.value?.type === 'OBJECT_ID' && 'ObjectId'}
+        {field?.value?.type === ValueType.OBJECT_ID && 'ObjectId'}
         {field?.value?.type === ValueType.STRING && (
           <>
             <AiOutlineFieldString />

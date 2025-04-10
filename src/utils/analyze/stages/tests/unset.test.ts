@@ -25,6 +25,9 @@ describe('unset', () => {
                 collection: 'Source',
                 path: '_id',
               },
+              value: {
+                type: ValueType.OBJECT_ID,
+              },
             },
             a: {
               _type: FIELD_SYMBOL,
@@ -43,6 +46,9 @@ describe('unset', () => {
             id: {
               collection: 'Source',
               path: '_id',
+            },
+            value: {
+              type: ValueType.OBJECT_ID,
             },
           },
         },
@@ -68,6 +74,9 @@ describe('unset', () => {
                 collection: 'Source',
                 path: '_id',
               },
+              value: {
+                type: ValueType.OBJECT_ID,
+              },
             },
             a: {
               b: {
@@ -88,6 +97,9 @@ describe('unset', () => {
             id: {
               collection: 'Source',
               path: '_id',
+            },
+            value: {
+              type: ValueType.OBJECT_ID,
             },
           },
         },

@@ -1,6 +1,11 @@
 import { setStage } from '@/utils/analyze/stages/set.ts';
-import { DEFAULT_COLLECTION, FIELD_SYMBOL, getBaseState } from '../..';
-import { ValueType } from '../..';
+import {
+  DEFAULT_COLLECTION,
+  FIELD_SYMBOL,
+  TMP_COLLECTION,
+  ValueType,
+  getBaseState,
+} from '../..';
 
 describe('set', () => {
   it('set field', () => {
@@ -23,6 +28,9 @@ describe('set', () => {
                 collection: 'Source',
                 path: '_id',
               },
+              value: {
+                type: ValueType.OBJECT_ID,
+              },
             },
           },
         },
@@ -35,11 +43,14 @@ describe('set', () => {
               collection: 'Source',
               path: '_id',
             },
+            value: {
+              type: ValueType.OBJECT_ID,
+            },
           },
           a: {
             _type: FIELD_SYMBOL,
             id: {
-              collection: DEFAULT_COLLECTION,
+              collection: TMP_COLLECTION,
               path: 'a',
             },
             value: {
@@ -75,6 +86,9 @@ describe('set', () => {
                 collection: 'Source',
                 path: '_id',
               },
+              value: {
+                type: ValueType.OBJECT_ID,
+              },
             },
           },
         },
@@ -87,12 +101,15 @@ describe('set', () => {
               collection: 'Source',
               path: '_id',
             },
+            value: {
+              type: ValueType.OBJECT_ID,
+            },
           },
           a: {
             b: {
               _type: FIELD_SYMBOL,
               id: {
-                collection: DEFAULT_COLLECTION,
+                collection: TMP_COLLECTION,
                 path: 'a.b',
               },
               value: {
@@ -103,7 +120,7 @@ describe('set', () => {
             c: {
               _type: FIELD_SYMBOL,
               id: {
-                collection: DEFAULT_COLLECTION,
+                collection: TMP_COLLECTION,
                 path: 'a.c',
               },
               value: {
@@ -117,7 +134,7 @@ describe('set', () => {
     });
   });
 
-  it('grep prev value', () => {
+  it('ignore prev value', () => {
     const result = setStage({
       state: {
         collections: {
@@ -129,6 +146,9 @@ describe('set', () => {
                   collection: DEFAULT_COLLECTION,
                   path: '_id',
                 },
+                value: {
+                  type: ValueType.OBJECT_ID,
+                },
               },
             },
           },
@@ -139,6 +159,9 @@ describe('set', () => {
                 id: {
                   collection: DEFAULT_COLLECTION,
                   path: '_id',
+                },
+                value: {
+                  type: ValueType.OBJECT_ID,
                 },
               },
               a: {
@@ -162,6 +185,9 @@ describe('set', () => {
               id: {
                 collection: DEFAULT_COLLECTION,
                 path: '_id',
+              },
+              value: {
+                type: ValueType.OBJECT_ID,
               },
             },
             a: {
@@ -195,6 +221,9 @@ describe('set', () => {
                 collection: DEFAULT_COLLECTION,
                 path: '_id',
               },
+              value: {
+                type: ValueType.OBJECT_ID,
+              },
             },
           },
         },
@@ -205,6 +234,9 @@ describe('set', () => {
               id: {
                 collection: DEFAULT_COLLECTION,
                 path: '_id',
+              },
+              value: {
+                type: ValueType.OBJECT_ID,
               },
             },
             a: {
@@ -229,11 +261,14 @@ describe('set', () => {
               collection: 'Source',
               path: '_id',
             },
+            value: {
+              type: ValueType.OBJECT_ID,
+            },
           },
           a: {
             _type: FIELD_SYMBOL,
             id: {
-              collection: 'Test',
+              collection: TMP_COLLECTION,
               path: 'a',
             },
             value: {
@@ -258,6 +293,9 @@ describe('set', () => {
                   collection: DEFAULT_COLLECTION,
                   path: '_id',
                 },
+                value: {
+                  type: ValueType.OBJECT_ID,
+                },
               },
             },
           },
@@ -269,6 +307,9 @@ describe('set', () => {
               id: {
                 collection: DEFAULT_COLLECTION,
                 path: '_id',
+              },
+              value: {
+                type: ValueType.OBJECT_ID,
               },
             },
           },
@@ -291,6 +332,9 @@ describe('set', () => {
                 collection: DEFAULT_COLLECTION,
                 path: '_id',
               },
+              value: {
+                type: ValueType.OBJECT_ID,
+              },
             },
             b: {
               _type: FIELD_SYMBOL,
@@ -310,12 +354,115 @@ describe('set', () => {
               collection: DEFAULT_COLLECTION,
               path: '_id',
             },
+            value: {
+              type: ValueType.OBJECT_ID,
+            },
           },
           a: {
             _type: FIELD_SYMBOL,
             id: {
               collection: DEFAULT_COLLECTION,
               path: 'b',
+            },
+          },
+        },
+      ],
+    });
+  });
+
+  it('should not reference old field', () => {
+    const result = setStage({
+      state: {
+        collections: {
+          [DEFAULT_COLLECTION]: {
+            fields: {
+              _id: {
+                _type: FIELD_SYMBOL,
+                id: {
+                  collection: DEFAULT_COLLECTION,
+                  path: '_id',
+                },
+                value: {
+                  type: ValueType.OBJECT_ID,
+                },
+              },
+              a: {
+                _type: FIELD_SYMBOL,
+                id: {
+                  collection: DEFAULT_COLLECTION,
+                  path: 'a',
+                },
+              },
+            },
+          },
+        },
+        results: [
+          {
+            _id: {
+              _type: FIELD_SYMBOL,
+              id: {
+                collection: DEFAULT_COLLECTION,
+                path: '_id',
+              },
+              value: {
+                type: ValueType.OBJECT_ID,
+              },
+            },
+          },
+        ],
+      },
+      stage: {
+        $set: {
+          a: '1',
+        },
+      },
+    });
+
+    expect(result).toStrictEqual({
+      collections: {
+        [DEFAULT_COLLECTION]: {
+          fields: {
+            _id: {
+              _type: FIELD_SYMBOL,
+              id: {
+                collection: DEFAULT_COLLECTION,
+                path: '_id',
+              },
+              value: {
+                type: ValueType.OBJECT_ID,
+              },
+            },
+            a: {
+              _type: FIELD_SYMBOL,
+              id: {
+                collection: DEFAULT_COLLECTION,
+                path: 'a',
+              },
+            },
+          },
+        },
+      },
+      results: [
+        {
+          _id: {
+            _type: FIELD_SYMBOL,
+            id: {
+              collection: DEFAULT_COLLECTION,
+              path: '_id',
+            },
+            value: {
+              type: ValueType.OBJECT_ID,
+            },
+          },
+          a: {
+            _type: FIELD_SYMBOL,
+            id: {
+              collection: TMP_COLLECTION,
+              path: 'a',
+            },
+            value: {
+              type: ValueType.STRING,
+              value: '1',
             },
           },
         },

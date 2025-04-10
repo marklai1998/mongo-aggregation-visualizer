@@ -4,17 +4,16 @@ import { Collections } from '@/containers/Collections.tsx';
 import { Result } from '@/containers/Result.tsx';
 import type { Aggregation } from '@/types/aggregation.ts';
 import { Box, HStack, Heading, VStack } from '@chakra-ui/react';
-import { last } from 'ramda';
-import { useMemo, useState } from 'react';
+import { last, tail } from 'ramda';
+import { Fragment, useMemo, useState } from 'react';
 import { analyze } from './utils/analyze';
 
 export const App = () => {
   const [value, setValue] = useState<Aggregation>([]);
 
-  const state = useMemo(() => {
+  const { states, state } = useMemo(() => {
     const res = analyze(value);
-    console.dir(res);
-    return last(res);
+    return { states: tail(res), state: last(res) };
   }, [value]);
 
   return (
@@ -37,14 +36,23 @@ export const App = () => {
           px="8"
           py="6"
         >
-          <Box minW="500px" flexShrink="0">
-            <Heading mb="4">Collections</Heading>
-            <Collections state={state} />
-          </Box>
-          <Box minW="500px" flexShrink="0">
-            <Heading mb="4">Result</Heading>
-            <Result state={state} />
-          </Box>
+          {state && (
+            <Box minW="500px" flexShrink="0">
+              <Heading mb="4">Collections</Heading>
+              <Collections state={state} />
+            </Box>
+          )}
+          {states.map((state, idx) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: fix it later
+            <Fragment key={idx}>
+              <Box minW="500px" flexShrink="0">
+                <Heading mb="4">
+                  {idx === states.length - 1 ? 'Result' : `Stage: ${idx + 1}`}
+                </Heading>
+                <Result state={state} />
+              </Box>
+            </Fragment>
+          ))}
         </HStack>
       </HStack>
     </VStack>

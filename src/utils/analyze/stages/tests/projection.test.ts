@@ -1,6 +1,7 @@
 import {
   DEFAULT_COLLECTION,
   FIELD_SYMBOL,
+  ValueType,
   getBaseState,
 } from '@/utils/analyze';
 import { projectionStage } from '@/utils/analyze/stages/projection.ts';
@@ -26,6 +27,9 @@ describe('projection', () => {
                 collection: 'Source',
                 path: '_id',
               },
+              value: {
+                type: ValueType.OBJECT_ID,
+              },
             },
             a: {
               _type: FIELD_SYMBOL,
@@ -44,6 +48,9 @@ describe('projection', () => {
             id: {
               collection: 'Source',
               path: '_id',
+            },
+            value: {
+              type: ValueType.OBJECT_ID,
             },
           },
           a: {
@@ -78,6 +85,9 @@ describe('projection', () => {
               id: {
                 collection: 'Source',
                 path: '_id',
+              },
+              value: {
+                type: ValueType.OBJECT_ID,
               },
             },
             a: {
@@ -116,6 +126,9 @@ describe('projection', () => {
                   collection: DEFAULT_COLLECTION,
                   path: '_id',
                 },
+                value: {
+                  type: ValueType.OBJECT_ID,
+                },
               },
               a: {
                 b: {
@@ -136,6 +149,9 @@ describe('projection', () => {
               id: {
                 collection: DEFAULT_COLLECTION,
                 path: '_id',
+              },
+              value: {
+                type: ValueType.OBJECT_ID,
               },
             },
             a: {
@@ -170,6 +186,9 @@ describe('projection', () => {
                 collection: DEFAULT_COLLECTION,
                 path: '_id',
               },
+              value: {
+                type: ValueType.OBJECT_ID,
+              },
             },
             a: {
               b: {
@@ -197,6 +216,9 @@ describe('projection', () => {
             id: {
               collection: 'Source',
               path: '_id',
+            },
+            value: {
+              type: ValueType.OBJECT_ID,
             },
           },
           a: {
@@ -232,6 +254,9 @@ describe('projection', () => {
                   collection: DEFAULT_COLLECTION,
                   path: '_id',
                 },
+                value: {
+                  type: ValueType.OBJECT_ID,
+                },
               },
               a: {
                 b: {
@@ -252,6 +277,9 @@ describe('projection', () => {
               id: {
                 collection: DEFAULT_COLLECTION,
                 path: '_id',
+              },
+              value: {
+                type: ValueType.OBJECT_ID,
               },
             },
             a: {
@@ -283,6 +311,9 @@ describe('projection', () => {
                 collection: DEFAULT_COLLECTION,
                 path: '_id',
               },
+              value: {
+                type: ValueType.OBJECT_ID,
+              },
             },
             a: {
               b: {
@@ -303,6 +334,9 @@ describe('projection', () => {
             id: {
               collection: 'Source',
               path: '_id',
+            },
+            value: {
+              type: ValueType.OBJECT_ID,
             },
           },
           a: {
@@ -339,6 +373,9 @@ describe('projection', () => {
                 collection: 'Source',
                 path: '_id',
               },
+              value: {
+                type: ValueType.OBJECT_ID,
+              },
             },
             a: {
               _type: FIELD_SYMBOL,
@@ -357,6 +394,9 @@ describe('projection', () => {
             id: {
               collection: 'Source',
               path: '_id',
+            },
+            value: {
+              type: ValueType.OBJECT_ID,
             },
           },
         },
@@ -384,6 +424,9 @@ describe('projection', () => {
               id: {
                 collection: 'Source',
                 path: '_id',
+              },
+              value: {
+                type: ValueType.OBJECT_ID,
               },
             },
             a: {

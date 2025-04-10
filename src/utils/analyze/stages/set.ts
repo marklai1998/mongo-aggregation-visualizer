@@ -3,7 +3,13 @@ import { isExpression, isReferencePath } from '@/utils/analyze/analyzeUtil.ts';
 import { resolveField } from '@/utils/analyze/resolveField.ts';
 import { recursive } from '@/utils/recursive.ts';
 import { assocPath, clone } from 'ramda';
-import { type Field, type StageAnalyzer, ValueType } from '..';
+import {
+  FIELD_SYMBOL,
+  type Field,
+  type StageAnalyzer,
+  TMP_COLLECTION,
+  ValueType,
+} from '..';
 
 export const setStage: StageAnalyzer<SetStage> = ({
   state: prevState,
@@ -36,10 +42,19 @@ export const setStage: StageAnalyzer<SetStage> = ({
           : undefined;
 
       state.results = state.results.map(
-        assocPath(path.split('.'), {
-          ...resolvedField,
-          ...(newValue ? { value: newValue } : {}),
-        }),
+        assocPath(
+          path.split('.'),
+          isReferencePath(value)
+            ? { ...resolvedField, ...(newValue ? { value: newValue } : {}) }
+            : {
+                _type: FIELD_SYMBOL,
+                id: {
+                  collection: TMP_COLLECTION,
+                  path,
+                },
+                ...(newValue ? { value: newValue } : {}),
+              },
+        ),
       );
     },
   });
