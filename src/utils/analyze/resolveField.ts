@@ -6,7 +6,7 @@ import {
   type State,
   ValueType,
 } from '@/utils/analyze/index.ts';
-import { assocPath, last, path as pathFn, tail } from 'ramda';
+import { assocPath, path as pathFn, tail } from 'ramda';
 
 export const resolveField = ({
   prevStates,
@@ -44,9 +44,7 @@ export const resolveField = ({
         }
     : undefined;
 
-  const prevResultItemDoc = last(prevStates)?.results.find(
-    pathFn(path.split('.')),
-  );
+  const prevResultItemDoc = state?.results.find(pathFn(path.split('.')));
   const prevResultItem = pathFn<Document | Field>(
     path.split('.'),
     prevResultItemDoc,

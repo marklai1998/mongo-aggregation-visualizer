@@ -1,6 +1,7 @@
 import type { Project } from '@/types/aggregation.ts';
 import type { StageAnalyzer } from '..';
 
+import { isField } from '@/utils/analyze/analyzeUtil.ts';
 import { resolveField } from '@/utils/analyze/resolveField.ts';
 import { unsetStage } from '@/utils/analyze/stages/unset.ts';
 import { recursive } from '@/utils/recursive.ts';
@@ -13,6 +14,7 @@ import {
   path as pathFn,
   range,
   slice,
+  tail,
 } from 'ramda';
 
 export const projectionStage: StageAnalyzer<Project> = ({
@@ -63,8 +65,9 @@ export const projectionStage: StageAnalyzer<Project> = ({
           .map((i) => slice(0, i + 1, splittedPath))
           .reverse();
 
-        for (const p of paths) {
-          if (pathFn(p, result)) {
+        for (const p of tail(paths)) {
+          const item = pathFn(p, result);
+          if (isField(item)) {
             clonedResult = dissocPath(p, result);
           }
         }
