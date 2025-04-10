@@ -13,6 +13,7 @@ import {
 
 export const setStage: StageAnalyzer<SetStage> = ({
   state: prevState,
+  states,
   stage: { $set: stage },
 }) => {
   const state = clone(prevState);
@@ -21,7 +22,7 @@ export const setStage: StageAnalyzer<SetStage> = ({
     object: stage,
     callback: ({ value, path }) => {
       const resolvedField = resolveField({
-        prevState,
+        prevStates: states,
         path,
         state,
         value,

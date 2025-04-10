@@ -9,6 +9,7 @@ import { assocPath, clone, dissocPath, omit } from 'ramda';
 
 export const projectionStage: StageAnalyzer<Project> = ({
   state: prevState,
+  states,
   stage: { $project: stage },
 }) => {
   const state = clone(prevState);
@@ -20,6 +21,7 @@ export const projectionStage: StageAnalyzer<Project> = ({
 
     return unsetStage({
       state,
+      states,
       stage: {
         $unset: Object.entries(flattedStage)
           .filter(([, v]) => !v)
@@ -39,7 +41,7 @@ export const projectionStage: StageAnalyzer<Project> = ({
       }
 
       const resolvedField = resolveField({
-        prevState,
+        prevStates: states,
         path,
         state,
         setSrc: true,

@@ -15,7 +15,20 @@ type Props = {
 const defaultValue = `// Source.aggregate(
 [
   {
-    $unset: ["a", "b.c"]
+    $set:{
+      c:"$x"
+    }
+  },
+  {
+    $set:{
+      a:{d:1}
+    }
+  },
+  {
+    $project:{
+      a:1,
+      b:1,c:1
+    }
   }
 ]
 // )

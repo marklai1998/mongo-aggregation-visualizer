@@ -6,17 +6,17 @@ import {
   type State,
   ValueType,
 } from '@/utils/analyze/index.ts';
-import { assocPath, path as pathFn, tail } from 'ramda';
+import { assocPath, last, path as pathFn, tail } from 'ramda';
 
 export const resolveField = ({
-  prevState,
+  prevStates,
   path,
   state,
   value,
   setSrc = true,
 }: {
   state: State;
-  prevState: State;
+  prevStates: State[];
   path: string;
   value?: unknown;
   setSrc: boolean;
@@ -25,7 +25,7 @@ export const resolveField = ({
 
   if (isReference) {
     return resolveField({
-      prevState,
+      prevStates,
       path: tail(value),
       state,
       setSrc: true,
@@ -44,7 +44,9 @@ export const resolveField = ({
         }
     : undefined;
 
-  const prevResultItemDoc = prevState.results.find(pathFn(path.split('.')));
+  const prevResultItemDoc = last(prevStates)?.results.find(
+    pathFn(path.split('.')),
+  );
   const prevResultItem = pathFn<Document | Field>(
     path.split('.'),
     prevResultItemDoc,
@@ -76,6 +78,12 @@ export const resolveField = ({
   };
 
   if (setSrc) {
+    for (const state of prevStates) {
+      for (let result of state.results) {
+        result = assocPath(path.split('.'), newField, result);
+      }
+    }
+
     state.collections[DEFAULT_COLLECTION].fields = assocPath(
       path.split('.'),
       newField,
